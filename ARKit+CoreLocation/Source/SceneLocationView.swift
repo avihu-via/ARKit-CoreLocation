@@ -11,7 +11,6 @@ import ARKit
 import CoreLocation
 import MapKit
 
-@available(iOS 11.0, *)
 public protocol SceneLocationViewDelegate: class {
     func sceneLocationViewDidAddSceneLocationEstimate(sceneLocationView: SceneLocationView, position: SCNVector3, location: CLLocation)
     func sceneLocationViewDidRemoveSceneLocationEstimate(sceneLocationView: SceneLocationView, position: SCNVector3, location: CLLocation)
@@ -26,19 +25,11 @@ public protocol SceneLocationViewDelegate: class {
     func sceneLocationViewDidUpdateLocationAndNodeScale(_ sceneLocationView: SceneLocationView, node: LocationNode)
 }
 
-// Different methods which can be used when determining locations (such as the user's location).
-public enum LocationEstimateMethod {
-    // Only uses core location data.
-    // Not suitable for adding nodes using current position, which requires more precision.
+public enum LocationEstimationMethod {
     case coreLocationDataOnly
-    
-    // Combines knowledge about movement through the AR world with
-    // the most relevant Core Location estimate (based on accuracy and time).
-    case mostRelevantEstimate
+    case ARAssistedEstimation
 }
 
-// Should conform to delegate here, add in future commit
-@available(iOS 11.0, *)
 public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
     // The limit to the scene, in terms of what data is considered reasonably accurate.
     // Measured in meters.
@@ -46,9 +37,8 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
     
     public weak var locationDelegate: SceneLocationViewDelegate?
     
-    // The method to use for determining locations.
-    // Not advisable to change this as the scene is ongoing.
-    public var locationEstimateMethod: LocationEstimateMethod = .mostRelevantEstimate
+    // Do not change while the scene is running.
+    public var locationEstimateMethod: LocationEstimationMethod = .ARAssistedEstimation
     
     let locationManager = LocationManager()
     
@@ -80,7 +70,7 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
     // The initial value of this property is respected.
     public var orientToTrueNorth = true
     
-    //MARK: Setup
+    // MARK: Setup
     public convenience init() {
         self.init(frame: CGRect.zero, options: nil)
     }
@@ -207,56 +197,40 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
         return bestEstimate.translatedLocation(to: position)
     }
     
-    //MARK: LocationNodes
-    // upon being added, a node's location, locationConfirmed and position may be modified and should not be changed externally.
-    public func addLocationNodeForCurrentPosition(locationNode: LocationNode) {
-        guard let currentPosition = currentScenePosition,
-        let currentLocation = currentLocation(),
-        let sceneNode = self.sceneNode else {
-            return
-        }
+    //MARK: Location Nodes
+    
+    public func tagCurrentLocation(with node: LocationNode) {
+        guard let currentPosition = currentScenePosition, let currentLocation = currentLocation(), let sceneNode = self.sceneNode else { return }
         
-        locationNode.location = currentLocation
+        node.location = currentLocation
+        node.confirmedLocation = locationEstimateMethod == .coreLocationDataOnly
+        node.position = currentPosition
         
-        // Location is not changed after being added when using core location data only for location estimates
-        if locationEstimateMethod == .coreLocationDataOnly {
-            locationNode.confirmedLocation = true
-        } else {
-            locationNode.confirmedLocation = false
-        }
-        
-        locationNode.position = currentPosition
-        
-        locationNodes.append(locationNode)
-        sceneNode.addChildNode(locationNode)
+        locationNodes.append(node)
+        sceneNode.addChildNode(node)
     }
     
     // location not being nil, and locationConfirmed being true are required
     // Upon being added, a node's position will be modified and should not be changed externally.
     // location will not be modified, but taken as accurate.
-    public func addLocationNodeWithConfirmedLocation(locationNode: LocationNode) {
-        if locationNode.location == nil || locationNode.confirmedLocation == false {
-            return
-        }
+    public func add(confirmedLocationNode node: LocationNode) {
+        guard node.location != nil && node.confirmedLocation == true else { return }
         
-        updatePositionAndScale(of: locationNode, initialSetup: true, animated: false)
-        
-        locationNodes.append(locationNode)
-        sceneNode?.addChildNode(locationNode)
+        updatePositionAndScale(of: node, initialSetup: true, animated: false)
+        locationNodes.append(node)
+        sceneNode?.addChildNode(node)
     }
     
-    public func removeLocationNode(locationNode: LocationNode) {
-        if let index = locationNodes.index(of: locationNode) {
+    public func remove(node: LocationNode) {
+        if let index = locationNodes.index(of: node) {
             locationNodes.remove(at: index)
         }
         
-        locationNode.removeFromParentNode()
+        node.removeFromParentNode()
     }
     
     private func confirmLocationOfDistantLocationNodes() {
-        guard let currentPosition = currentScenePosition else {
-            return
-        }
+        guard let currentPosition = currentScenePosition else { return }
         
         for locationNode in locationNodes {
             if !locationNode.confirmedLocation {
@@ -433,13 +407,11 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
 }
 
 //MARK: LocationManager
-@available(iOS 11.0, *)
+
 extension SceneLocationView: LocationManagerDelegate {
     func locationManagerDidUpdateLocation(_ locationManager: LocationManager, location: CLLocation) {
         addSceneLocationEstimate(location: location)
     }
     
-    func locationManagerDidUpdateHeading(_ locationManager: LocationManager, heading: CLLocationDirection, accuracy: CLLocationAccuracy) {
-        
-    }
+    func locationManagerDidUpdateHeading(_ locationManager: LocationManager, heading: CLLocationDirection, accuracy: CLLocationAccuracy) {}
 }
