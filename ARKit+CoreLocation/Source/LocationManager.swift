@@ -14,8 +14,8 @@ protocol LocationManagerDelegate: class {
     func locationManagerDidUpdateHeading(_ locationManager: LocationManager, heading: CLLocationDirection, accuracy: CLLocationDirection)
 }
 
-///Handles retrieving the location and heading from CoreLocation
-///Does not contain anything related to ARKit or advanced location
+// Handles retrieving the location and heading from CoreLocation
+// Does not contain anything related to ARKit or advanced location
 class LocationManager: NSObject, CLLocationManagerDelegate {
     weak var delegate: LocationManagerDelegate?
     

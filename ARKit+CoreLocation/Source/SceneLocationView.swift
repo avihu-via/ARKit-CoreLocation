@@ -16,9 +16,9 @@ public protocol SceneLocationViewDelegate: class {
     func sceneLocationViewDidAddSceneLocationEstimate(sceneLocationView: SceneLocationView, position: SCNVector3, location: CLLocation)
     func sceneLocationViewDidRemoveSceneLocationEstimate(sceneLocationView: SceneLocationView, position: SCNVector3, location: CLLocation)
     
-    ///After a node's location is initially set based on current location,
-    ///it is later confirmed once the user moves far enough away from it.
-    ///This update uses location data collected since the node was placed to give a more accurate location.
+    // After a node's location is initially set based on current location,
+    // it is later confirmed once the user moves far enough away from it.
+    // This update uses location data collected since the node was placed to give a more accurate location.
     func sceneLocationViewDidConfirmLocationOfNode(_ sceneLocationView: SceneLocationView, node: LocationNode)
     
     func sceneLocationViewDidSetupSceneNode(_ sceneLocationView: SceneLocationView, sceneNode: SCNNode)
@@ -26,28 +26,28 @@ public protocol SceneLocationViewDelegate: class {
     func sceneLocationViewDidUpdateLocationAndNodeScale(_ sceneLocationView: SceneLocationView, node: LocationNode)
 }
 
-///Different methods which can be used when determining locations (such as the user's location).
+// Different methods which can be used when determining locations (such as the user's location).
 public enum LocationEstimateMethod {
-    ///Only uses core location data.
-    ///Not suitable for adding nodes using current position, which requires more precision.
+    // Only uses core location data.
+    // Not suitable for adding nodes using current position, which requires more precision.
     case coreLocationDataOnly
     
-    ///Combines knowledge about movement through the AR world with
-    ///the most relevant Core Location estimate (based on accuracy and time).
+    // Combines knowledge about movement through the AR world with
+    // the most relevant Core Location estimate (based on accuracy and time).
     case mostRelevantEstimate
 }
 
-//Should conform to delegate here, add in future commit
+// Should conform to delegate here, add in future commit
 @available(iOS 11.0, *)
 public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
-    ///The limit to the scene, in terms of what data is considered reasonably accurate.
-    ///Measured in meters.
+    // The limit to the scene, in terms of what data is considered reasonably accurate.
+    // Measured in meters.
     private static let sceneLimit: CGFloat = 100.0
     
     public weak var locationDelegate: SceneLocationViewDelegate?
     
-    ///The method to use for determining locations.
-    ///Not advisable to change this as the scene is ongoing.
+    // The method to use for determining locations.
+    // Not advisable to change this as the scene is ongoing.
     public var locationEstimateMethod: LocationEstimateMethod = .mostRelevantEstimate
     
     let locationManager = LocationManager()
@@ -71,13 +71,13 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
     
     private var didFetchInitialLocation = false
     
-    ///Only to be overrided if you plan on manually setting True North.
-    ///When true, sets up the scene to face what the device considers to be True North.
-    ///This can be inaccurate, hence the option to override it.
-    ///The functions for altering True North can be used irrespective of this value,
-    ///but if the scene is oriented to true north, it will update without warning,
-    ///thus affecting your alterations.
-    ///The initial value of this property is respected.
+    // Only to be overrided if you plan on manually setting True North.
+    // When true, sets up the scene to face what the device considers to be True North.
+    // This can be inaccurate, hence the option to override it.
+    // The functions for altering True North can be used irrespective of this value,
+    // but if the scene is oriented to true north, it will update without warning,
+    // thus affecting your alterations.
+    // The initial value of this property is respected.
     public var orientToTrueNorth = true
     
     //MARK: Setup
@@ -128,33 +128,33 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
         updatePositionAndScaleOfLocationNodes()
     }
     
-    //MARK: True North
-    ///iOS can be inaccurate when setting true north
-    ///The scene is oriented to true north, and will update its heading when it gets a more accurate reading
-    ///You can disable this through setting the
-    ///These functions provide manual overriding of the scene heading,
-    /// if you have a more precise idea of where True North is
-    ///The goal is for the True North orientation problems to be resolved
-    ///At which point these functions would no longer be useful
+    // MARK: True North
+    // iOS can be inaccurate when setting true north
+    // The scene is oriented to true north, and will update its heading when it gets a more accurate reading
+    // You can disable this through setting the
+    // These functions provide manual overriding of the scene heading,
+    //  if you have a more precise idea of where True North is
+    // The goal is for the True North orientation problems to be resolved
+    // At which point these functions would no longer be useful
     
-    ///Moves the scene heading clockwise by 1 degree
-    ///Intended for correctional purposes
+    // Moves the scene heading clockwise by 1 degree
+    // Intended for correctional purposes
     public func moveSceneHeadingClockwise() {
         sceneNode?.eulerAngles.y -= Float(1).degreesToRadians
     }
     
-    ///Moves the scene heading anti-clockwise by 1 degree
-    ///Intended for correctional purposes
+    // Moves the scene heading anti-clockwise by 1 degree
+    // Intended for correctional purposes
     public func moveSceneHeadingAntiClockwise() {
         sceneNode?.eulerAngles.y += Float(1).degreesToRadians
     }
     
-    ///Resets the scene heading to 0
+    // Resets the scene heading to 0
     func resetSceneHeading() {
         sceneNode?.eulerAngles.y = 0
     }
     
-    //MARK: Scene location estimates
+    //MARK: Scene Location Estimates
     
     public var currentScenePosition: SCNVector3? {
         guard let pointOfView = pointOfView else { return nil }
@@ -165,7 +165,7 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
         return pointOfView?.eulerAngles
     }
     
-    ///Adds a scene location estimate based on current time, camera position and location from location manager
+    // Adds a scene location estimate based on current time, camera position and location from location manager
     fileprivate func addSceneLocationEstimate(location: CLLocation) {
         guard let currentScenePosition = currentScenePosition else { return }
         
@@ -178,10 +178,10 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
         sceneLocationEstimates = sceneLocationEstimates.filter { $0.distance(to: currentScenePosition) <= SceneLocationView.sceneLimit }
     }
     
-    ///The best estimation of location that has been taken
-    ///This takes into account horizontal accuracy, and the time at which the estimation was taken
-    ///favouring the most accurate, and then the most recent result.
-    ///This doesn't indicate where the user currently is.
+    // The best estimation of location that has been taken
+    // This takes into account horizontal accuracy, and the time at which the estimation was taken
+    // favouring the most accurate, and then the most recent result.
+    // This doesn't indicate where the user currently is.
     func bestLocationEstimate() -> SceneLocationEstimate? {
         let sortedLocationEstimates = sceneLocationEstimates.sorted(by: {
             if $0.realWorldLocation.horizontalAccuracy == $1.realWorldLocation.horizontalAccuracy {
@@ -208,7 +208,7 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
     }
     
     //MARK: LocationNodes
-    ///upon being added, a node's location, locationConfirmed and position may be modified and should not be changed externally.
+    // upon being added, a node's location, locationConfirmed and position may be modified and should not be changed externally.
     public func addLocationNodeForCurrentPosition(locationNode: LocationNode) {
         guard let currentPosition = currentScenePosition,
         let currentLocation = currentLocation(),
@@ -218,7 +218,7 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
         
         locationNode.location = currentLocation
         
-        ///Location is not changed after being added when using core location data only for location estimates
+        // Location is not changed after being added when using core location data only for location estimates
         if locationEstimateMethod == .coreLocationDataOnly {
             locationNode.confirmedLocation = true
         } else {
@@ -231,9 +231,9 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
         sceneNode.addChildNode(locationNode)
     }
     
-    ///location not being nil, and locationConfirmed being true are required
-    ///Upon being added, a node's position will be modified and should not be changed externally.
-    ///location will not be modified, but taken as accurate.
+    // location not being nil, and locationConfirmed being true are required
+    // Upon being added, a node's position will be modified and should not be changed externally.
+    // location will not be modified, but taken as accurate.
     public func addLocationNodeWithConfirmedLocation(locationNode: LocationNode) {
         if locationNode.location == nil || locationNode.confirmedLocation == false {
             return
