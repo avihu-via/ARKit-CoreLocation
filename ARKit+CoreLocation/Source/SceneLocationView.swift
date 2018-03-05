@@ -11,6 +11,7 @@ import ARKit
 import CoreLocation
 import MapKit
 
+@available(iOS 11.0, *)
 public protocol SceneLocationViewDelegate: class {
     func sceneLocationViewDidAddSceneLocationEstimate(sceneLocationView: SceneLocationView, position: SCNVector3, location: CLLocation)
     func sceneLocationViewDidRemoveSceneLocationEstimate(sceneLocationView: SceneLocationView, position: SCNVector3, location: CLLocation)
@@ -30,6 +31,7 @@ public enum LocationEstimationMethod {
     case ARAssistedEstimation
 }
 
+@available(iOS 11.0, *)
 public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
     // The limit to the scene, in terms of what data is considered reasonably accurate.
     // Measured in meters.
@@ -408,6 +410,7 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
 
 //MARK: LocationManager
 
+@available(iOS 11.0, *)
 extension SceneLocationView: LocationManagerDelegate {
     func locationManagerDidUpdateLocation(_ locationManager: LocationManager, location: CLLocation) {
         addSceneLocationEstimate(location: location)
