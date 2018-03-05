@@ -71,7 +71,7 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
         let pinLocation = CLLocation(coordinate: pinCoordinate, altitude: 236)
         let pinImage = UIImage(named: "pin")!
         let pinLocationNode = LocationAnnotationNode(location: pinLocation, image: pinImage)
-        sceneLocationView.addLocationNodeWithConfirmedLocation(locationNode: pinLocationNode)
+        sceneLocationView.add(confirmedLocationNode: pinLocationNode)
         
         view.addSubview(sceneLocationView)
         
@@ -137,12 +137,11 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
     @objc func updateUserLocation() {
         if let currentLocation = sceneLocationView.currentLocation() {
             DispatchQueue.main.async {
-                
                 if let bestEstimate = self.sceneLocationView.bestLocationEstimate(),
-                    let position = self.sceneLocationView.currentScenePosition() {
+                    let position = self.sceneLocationView.currentScenePosition {
                     DDLogDebug("")
                     DDLogDebug("Fetch current location")
-                    DDLogDebug("best location estimate, position: \(bestEstimate.position), location: \(bestEstimate.location.coordinate), accuracy: \(bestEstimate.location.horizontalAccuracy), date: \(bestEstimate.location.timestamp)")
+                    DDLogDebug("best location estimate, position: \(bestEstimate.virtualPosition), location: \(bestEstimate.realWorldLocation.coordinate), accuracy: \(bestEstimate.realWorldLocation.horizontalAccuracy), date: \(bestEstimate.realWorldLocation.timestamp)")
                     DDLogDebug("current position: \(position)")
                     
                     let translation = bestEstimate.translatedLocation(to: position)
@@ -179,7 +178,7 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
                             self.mapView.addAnnotation(self.locationEstimateAnnotation!)
                         }
                         
-                        self.locationEstimateAnnotation!.coordinate = bestLocationEstimate!.location.coordinate
+                        self.locationEstimateAnnotation!.coordinate = bestLocationEstimate!.realWorldLocation.coordinate
                     } else {
                         if self.locationEstimateAnnotation != nil {
                             self.mapView.removeAnnotation(self.locationEstimateAnnotation!)
@@ -192,7 +191,7 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
     }
     
     @objc func updateInfoLabel() {
-        if let position = sceneLocationView.currentScenePosition() {
+        if let position = sceneLocationView.currentScenePosition {
             infoLabel.text = "x: \(String(format: "%.2f", position.x)), y: \(String(format: "%.2f", position.y)), z: \(String(format: "%.2f", position.z))\n"
         }
         
@@ -235,7 +234,7 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
                         let image = UIImage(named: "pin")!
                         let annotationNode = LocationAnnotationNode(location: nil, image: image)
                         annotationNode.scaleRelativeToDistance = true
-                        sceneLocationView.addLocationNodeForCurrentPosition(locationNode: annotationNode)
+                        sceneLocationView.tagCurrentLocation(with: annotationNode)
                     }
                 }
             }
@@ -277,16 +276,11 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
         DDLogDebug("remove scene location estimate, position: \(position), location: \(location.coordinate), accuracy: \(location.horizontalAccuracy), date: \(location.timestamp)")
     }
     
-    func sceneLocationViewDidConfirmLocationOfNode(sceneLocationView: SceneLocationView, node: LocationNode) {
-    }
+    func sceneLocationViewDidConfirmLocationOfNode(_ sceneLocationView: SceneLocationView, node: LocationNode) {}
     
-    func sceneLocationViewDidSetupSceneNode(sceneLocationView: SceneLocationView, sceneNode: SCNNode) {
-        
-    }
+    func sceneLocationViewDidSetupSceneNode(_ sceneLocationView: SceneLocationView, sceneNode: SCNNode) {}
     
-    func sceneLocationViewDidUpdateLocationAndScaleOfLocationNode(sceneLocationView: SceneLocationView, locationNode: LocationNode) {
-        
-    }
+    func sceneLocationViewDidUpdateLocationAndNodeScale(_ sceneLocationView: SceneLocationView, node: LocationNode) {}
 }
 
 extension DispatchQueue {
