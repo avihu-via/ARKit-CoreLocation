@@ -135,9 +135,9 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
     }
     
     @objc func updateUserLocation() {
-        if let currentLocation = sceneLocationView.currentLocation() {
+        if let currentLocation = sceneLocationView.currentLocation {
             DispatchQueue.main.async {
-                if let bestEstimate = self.sceneLocationView.bestLocationEstimate(),
+                if let bestEstimate = self.sceneLocationView.bestLocationEstimate,
                     let position = self.sceneLocationView.currentScenePosition {
                     DDLogDebug("")
                     DDLogDebug("Fetch current location")
@@ -170,7 +170,7 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
                 }
                 
                 if self.displayDebugging {
-                    let bestLocationEstimate = self.sceneLocationView.bestLocationEstimate()
+                    let bestLocationEstimate = self.sceneLocationView.bestLocationEstimate
                     
                     if bestLocationEstimate != nil {
                         if self.locationEstimateAnnotation == nil {

@@ -174,27 +174,24 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
     // This takes into account horizontal accuracy, and the time at which the estimation was taken
     // favouring the most accurate, and then the most recent result.
     // This doesn't indicate where the user currently is.
-    func bestLocationEstimate() -> SceneLocationEstimate? {
-        let sortedLocationEstimates = sceneLocationEstimates.sorted(by: {
+    var bestLocationEstimate: SceneLocationEstimate? {
+        let sortedLocationEstimates = sceneLocationEstimates.sorted {
             if $0.realWorldLocation.horizontalAccuracy == $1.realWorldLocation.horizontalAccuracy {
                 return $0.realWorldLocation.timestamp > $1.realWorldLocation.timestamp
             }
             
             return $0.realWorldLocation.horizontalAccuracy < $1.realWorldLocation.horizontalAccuracy
-        })
+        }
         
         return sortedLocationEstimates.first
     }
     
-    public func currentLocation() -> CLLocation? {
+    public var currentLocation: CLLocation? {
         if locationEstimateMethod == .coreLocationDataOnly {
             return locationManager.currentLocation
         }
         
-        guard let bestEstimate = self.bestLocationEstimate(),
-            let position = currentScenePosition else {
-                return nil
-        }
+        guard let bestEstimate = bestLocationEstimate, let position = currentScenePosition else { return nil }
         
         return bestEstimate.translatedLocation(to: position)
     }
@@ -202,7 +199,7 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
     //MARK: Location Nodes
     
     public func tagCurrentLocation(with node: LocationNode) {
-        guard let currentPosition = currentScenePosition, let currentLocation = currentLocation(), let sceneNode = self.sceneNode else { return }
+        guard let currentPosition = currentScenePosition, let currentLocation = currentLocation, let sceneNode = self.sceneNode else { return }
         
         node.location = currentLocation
         node.confirmedLocation = locationEstimateMethod == .coreLocationDataOnly
@@ -234,16 +231,9 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
     private func confirmLocationOfDistantLocationNodes() {
         guard let currentPosition = currentScenePosition else { return }
         
-        for locationNode in locationNodes {
-            if !locationNode.confirmedLocation {
-                let currentPoint = currentPosition.asPoint
-                let locationNodePoint = locationNode.position.asPoint
-                
-                if currentPoint.distance(to: locationNodePoint) > CGFloat(SceneLocationView.sceneLimit) {
-                    confirmLocation(of: locationNode)
-                }
-            }
-        }
+        locationNodes.filter { !$0.confirmedLocation }
+                     .filter { !$0.position.isWithin(distanceOf: SceneLocationView.sceneLimit, from: currentPosition) }
+                     .forEach { confirmLocation(of: $0) }
     }
     
     func location(of node: LocationNode) -> CLLocation {
@@ -251,12 +241,8 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
             return node.location!
         }
         
-        if let bestLocationEstimate = bestLocationEstimate(),
-            node.location == nil ||
-                bestLocationEstimate.realWorldLocation.horizontalAccuracy < node.location!.horizontalAccuracy {
-            let translatedLocation = bestLocationEstimate.translatedLocation(to: node.position)
-            
-            return translatedLocation
+        if let bestLocationEstimate = bestLocationEstimate, node.location == nil || bestLocationEstimate.realWorldLocation.horizontalAccuracy < node.location!.horizontalAccuracy {
+            return bestLocationEstimate.translatedLocation(to: node.position)
         } else {
             return node.location!
         }
@@ -277,10 +263,7 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
     }
     
     public func updatePositionAndScale(of node: LocationNode, initialSetup: Bool = false, animated: Bool = false, duration: TimeInterval = 0.1) {
-        guard let currentPosition = currentScenePosition,
-            let currentLocation = currentLocation() else {
-            return
-        }
+        guard let currentPosition = currentScenePosition, let currentLocation = currentLocation else { return }
         
         SCNTransaction.begin()
         
@@ -294,10 +277,7 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
         
         //Position is set to a position coordinated via the current position
         let locationTranslation = currentLocation.translation(toLocation: locationNodeLocation)
-        
-        
         let adjustedDistance: CLLocationDistance
-        
         let distance = locationNodeLocation.distance(from: currentLocation)
         
         if node.confirmedLocation && (distance > 100 || node.continuallyAdjustNodePositionWhenWithinRange || initialSetup) {

@@ -10,12 +10,12 @@ import Foundation
 import CoreLocation
 
 public extension CLLocationCoordinate2D {
-    public func coordinateWithBearing(bearing: Double, distanceMeters: Double) -> CLLocationCoordinate2D {
+    public func coordinate(withBearingDegrees bearing: Double, distanceMeters: Double) -> CLLocationCoordinate2D {
         //The numbers for earth radius may be _off_ here
         //but this gives a reasonably accurate result..
         //Any correction here is welcome.
-        let distRadiansLat = distanceMeters.metersToLatitude() // earth radius in meters latitude
-        let distRadiansLong = distanceMeters.metersToLongitude() // earth radius in meters longitude
+        let distRadiansLat = distanceMeters.metersToLatitude // earth radius in meters latitude
+        let distRadiansLong = distanceMeters.metersToLongitude // earth radius in meters longitude
         
         let lat1 = self.latitude * Double.pi / 180
         let lon1 = self.longitude * Double.pi / 180

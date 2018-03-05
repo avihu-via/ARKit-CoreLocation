@@ -6,4 +6,6 @@
 //  Copyright © 2018 Project Dent. All rights reserved.
 //
 
-import Foundation
+import XCTest
+
+class CLLocationExtensionsTests: XCTestCase {}
