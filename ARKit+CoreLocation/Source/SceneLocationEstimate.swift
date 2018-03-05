@@ -17,4 +17,20 @@ struct SceneLocationEstimate {
     func distance(to position: SCNVector3) -> CGFloat {
         return virtualPosition.asPoint.distance(to: position.asPoint)
     }
+    
+    // Compares the location's position to another position, to determine the translation between them
+    func locationTranslation(to position: SCNVector3) -> LocationTranslation {
+        return LocationTranslation(
+            latitudeTranslation: Double(self.virtualPosition.z - position.z),
+            longitudeTranslation: Double(position.x - self.virtualPosition.x),
+            altitudeTranslation: Double(position.y - self.virtualPosition.y))
+    }
+    
+    // Translates the location by comparing with a given position
+    func translatedLocation(to position: SCNVector3) -> CLLocation {
+        let translation = self.locationTranslation(to: position)
+        let translatedLocation = self.realWorldLocation.translatedLocation(with: translation)
+        
+        return translatedLocation
+    }
 }
