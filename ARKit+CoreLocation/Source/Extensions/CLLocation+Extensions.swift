@@ -54,17 +54,12 @@ public extension CLLocation {
             altitudeTranslation: altitudeTranslation)
     }
     
-    public func translatedLocation(with translation: LocationTranslation) -> CLLocation {
-        let latitudeCoordinate = self.coordinate.coordinateWithBearing(bearing: 0, distanceMeters: translation.latitudeTranslation)
-        
-        let longitudeCoordinate = self.coordinate.coordinateWithBearing(bearing: 90, distanceMeters: translation.longitudeTranslation)
-        
-        let coordinate = CLLocationCoordinate2D(
-            latitude: latitudeCoordinate.latitude,
-            longitude: longitudeCoordinate.longitude)
-        
-        let altitude = self.altitude + translation.altitudeTranslation
-        
-        return CLLocation(coordinate: coordinate, altitude: altitude, horizontalAccuracy: self.horizontalAccuracy, verticalAccuracy: self.verticalAccuracy, timestamp: self.timestamp)
+    public func translatedLocation(using translation: LocationTranslation) -> CLLocation {
+        return CLLocation(
+            coordinate: CLLocationCoordinate2D(
+                latitude: self.coordinate.coordinateWithBearing(bearing: 0, distanceMeters: translation.latitudeTranslation).latitude,
+                longitude: self.coordinate.coordinateWithBearing(bearing: 90, distanceMeters: translation.longitudeTranslation).longitude),
+            altitude: self.altitude + translation.altitudeTranslation,
+            horizontalAccuracy: self.horizontalAccuracy, verticalAccuracy: self.verticalAccuracy, timestamp: self.timestamp)
     }
 }

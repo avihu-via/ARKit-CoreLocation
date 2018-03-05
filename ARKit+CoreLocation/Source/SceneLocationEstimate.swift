@@ -29,7 +29,7 @@ struct SceneLocationEstimate {
     // Translates the location by comparing with a given position
     func translatedLocation(to position: SCNVector3) -> CLLocation {
         let translation = self.locationTranslation(to: position)
-        let translatedLocation = self.realWorldLocation.translatedLocation(with: translation)
+        let translatedLocation = self.realWorldLocation.translatedLocation(using: translation)
         
         return translatedLocation
     }

@@ -10,7 +10,7 @@ import Foundation
 import CoreLocation
 
 public extension CLLocationCoordinate2D {
-    public func coordinateWithBearing(bearing:Double, distanceMeters:Double) -> CLLocationCoordinate2D {
+    public func coordinateWithBearing(bearing: Double, distanceMeters: Double) -> CLLocationCoordinate2D {
         //The numbers for earth radius may be _off_ here
         //but this gives a reasonably accurate result..
         //Any correction here is welcome.
