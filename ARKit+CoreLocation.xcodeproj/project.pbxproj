@@ -21,9 +21,20 @@
 		49A3FC031F09BADB00AA59C8 /* FloatingPoint+Radians.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A3FC021F09BADB00AA59C8 /* FloatingPoint+Radians.swift */; };
 		49A3FC051F0A423800AA59C8 /* CGPoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A3FC041F0A423800AA59C8 /* CGPoint+Extensions.swift */; };
 		49D206F31F124BDD00D7D622 /* SCNNode+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D206F21F124BDD00D7D622 /* SCNNode+Extensions.swift */; };
+		66CFBFE1204DD6D900BF6A80 /* ARKitCoreLocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CFBFE0204DD6D900BF6A80 /* ARKitCoreLocationTests.swift */; };
 		71B6A9EDA814C7F42DF123D9 /* Pods_ARKit_CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C10523EF85AA6B7CDF962AD /* Pods_ARKit_CoreLocation.framework */; };
 		D8C205D11F5B197200675E6E /* NotSupportedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C205D01F5B197200675E6E /* NotSupportedViewController.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		66CFBFE3204DD6D900BF6A80 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49A3FBD01F09988100AA59C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49A3FBD71F09988100AA59C8;
+			remoteInfo = "ARKit+CoreLocation";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		38104A8494954E9B79241EAE /* Pods-ARKit+CoreLocation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARKit+CoreLocation.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ARKit+CoreLocation/Pods-ARKit+CoreLocation.debug.xcconfig"; sourceTree = "<group>"; };
@@ -43,6 +54,9 @@
 		49A3FC021F09BADB00AA59C8 /* FloatingPoint+Radians.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FloatingPoint+Radians.swift"; sourceTree = "<group>"; };
 		49A3FC041F0A423800AA59C8 /* CGPoint+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extensions.swift"; sourceTree = "<group>"; };
 		49D206F21F124BDD00D7D622 /* SCNNode+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCNNode+Extensions.swift"; sourceTree = "<group>"; };
+		66CFBFDE204DD6D900BF6A80 /* ARKit+CoreLocationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ARKit+CoreLocationTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		66CFBFE0204DD6D900BF6A80 /* ARKitCoreLocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARKitCoreLocationTests.swift; sourceTree = "<group>"; };
+		66CFBFE2204DD6D900BF6A80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C10523EF85AA6B7CDF962AD /* Pods_ARKit_CoreLocation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARKit_CoreLocation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A967016A4C9D5DA8BF8AE438 /* Pods-ARKit+CoreLocation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARKit+CoreLocation.release.xcconfig"; path = "Pods/Target Support Files/Pods-ARKit+CoreLocation/Pods-ARKit+CoreLocation.release.xcconfig"; sourceTree = "<group>"; };
 		D8C205D01F5B197200675E6E /* NotSupportedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotSupportedViewController.swift; sourceTree = "<group>"; };
@@ -57,6 +71,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		66CFBFDB204DD6D900BF6A80 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -64,6 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				49A3FBDA1F09988100AA59C8 /* ARKit+CoreLocation */,
+				66CFBFDF204DD6D900BF6A80 /* ARKit+CoreLocationTests */,
 				49A3FBD91F09988100AA59C8 /* Products */,
 				5F8D9F16076E5CEBAA727F10 /* Pods */,
 				F2E2E005FD78BDD52B0F8A94 /* Frameworks */,
@@ -74,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				49A3FBD81F09988100AA59C8 /* ARKit+CoreLocation.app */,
+				66CFBFDE204DD6D900BF6A80 /* ARKit+CoreLocationTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -118,6 +141,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		66CFBFDF204DD6D900BF6A80 /* ARKit+CoreLocationTests */ = {
+			isa = PBXGroup;
+			children = (
+				66CFBFE0204DD6D900BF6A80 /* ARKitCoreLocationTests.swift */,
+				66CFBFE2204DD6D900BF6A80 /* Info.plist */,
+			);
+			path = "ARKit+CoreLocationTests";
+			sourceTree = "<group>";
+		};
 		F2E2E005FD78BDD52B0F8A94 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -149,18 +181,41 @@
 			productReference = 49A3FBD81F09988100AA59C8 /* ARKit+CoreLocation.app */;
 			productType = "com.apple.product-type.application";
 		};
+		66CFBFDD204DD6D900BF6A80 /* ARKit+CoreLocationTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66CFBFE5204DD6D900BF6A80 /* Build configuration list for PBXNativeTarget "ARKit+CoreLocationTests" */;
+			buildPhases = (
+				66CFBFDA204DD6D900BF6A80 /* Sources */,
+				66CFBFDB204DD6D900BF6A80 /* Frameworks */,
+				66CFBFDC204DD6D900BF6A80 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				66CFBFE4204DD6D900BF6A80 /* PBXTargetDependency */,
+			);
+			name = "ARKit+CoreLocationTests";
+			productName = "ARKit+CoreLocationTests";
+			productReference = 66CFBFDE204DD6D900BF6A80 /* ARKit+CoreLocationTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		49A3FBD01F09988100AA59C8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0900;
+				LastSwiftUpdateCheck = 0930;
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Project Dent";
 				TargetAttributes = {
 					49A3FBD71F09988100AA59C8 = {
 						CreatedOnToolsVersion = 9.0;
+					};
+					66CFBFDD204DD6D900BF6A80 = {
+						CreatedOnToolsVersion = 9.3;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 49A3FBD71F09988100AA59C8;
 					};
 				};
 			};
@@ -178,6 +233,7 @@
 			projectRoot = "";
 			targets = (
 				49A3FBD71F09988100AA59C8 /* ARKit+CoreLocation */,
+				66CFBFDD204DD6D900BF6A80 /* ARKit+CoreLocationTests */,
 			);
 		};
 /* End PBXProject section */
@@ -189,6 +245,13 @@
 			files = (
 				49A3FBE81F09988100AA59C8 /* LaunchScreen.storyboard in Resources */,
 				49A3FBE51F09988100AA59C8 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		66CFBFDC204DD6D900BF6A80 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,7 +332,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		66CFBFDA204DD6D900BF6A80 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66CFBFE1204DD6D900BF6A80 /* ARKitCoreLocationTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		66CFBFE4204DD6D900BF6A80 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49A3FBD71F09988100AA59C8 /* ARKit+CoreLocation */;
+			targetProxy = 66CFBFE3204DD6D900BF6A80 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		49A3FBE61F09988100AA59C8 /* LaunchScreen.storyboard */ = {
@@ -425,6 +504,43 @@
 			};
 			name = Release;
 		};
+		66CFBFE6204DD6D900BF6A80 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = QNT889H433;
+				INFOPLIST_FILE = "ARKit+CoreLocationTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.turzion.ARKit-CoreLocationTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ARKit+CoreLocation.app/ARKit+CoreLocation";
+			};
+			name = Debug;
+		};
+		66CFBFE7204DD6D900BF6A80 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = QNT889H433;
+				INFOPLIST_FILE = "ARKit+CoreLocationTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.turzion.ARKit-CoreLocationTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ARKit+CoreLocation.app/ARKit+CoreLocation";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -442,6 +558,15 @@
 			buildConfigurations = (
 				49A3FBED1F09988100AA59C8 /* Debug */,
 				49A3FBEE1F09988100AA59C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		66CFBFE5204DD6D900BF6A80 /* Build configuration list for PBXNativeTarget "ARKit+CoreLocationTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66CFBFE6204DD6D900BF6A80 /* Debug */,
+				66CFBFE7204DD6D900BF6A80 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
