@@ -215,28 +215,23 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
-        if let touch = touches.first {
-            if touch.view != nil {
-                if (mapView == touch.view! ||
-                    mapView.recursiveSubviews().contains(touch.view!)) {
-                    centerMapOnUserLocation = false
-                } else {
-                    
-                    let location = touch.location(in: self.view)
-
-                    if location.x <= 40 && adjustNorthByTappingSidesOfScreen {
-                        print("left side of the screen")
-                        sceneLocationView.moveSceneHeadingAntiClockwise()
-                    } else if location.x >= view.frame.size.width - 40 && adjustNorthByTappingSidesOfScreen {
-                        print("right side of the screen")
-                        sceneLocationView.moveSceneHeadingClockwise()
-                    } else {
-                        let image = UIImage(named: "pin")!
-                        let annotationNode = LocationAnnotationNode(location: nil, image: image)
-                        annotationNode.scaleRelativeToDistance = true
-                        sceneLocationView.tagCurrentLocation(with: annotationNode)
-                    }
-                }
+        guard let touch = touches.first, touch.view != nil else { return }
+        if (mapView == touch.view! ||
+            mapView.recursiveSubviews().contains(touch.view!)) {
+            centerMapOnUserLocation = false
+        } else {
+            let location = touch.location(in: self.view)
+            if location.x <= 40 && adjustNorthByTappingSidesOfScreen {
+                print("left side of the screen")
+                sceneLocationView.moveSceneHeadingAntiClockwise()
+            } else if location.x >= view.frame.size.width - 40 && adjustNorthByTappingSidesOfScreen {
+                print("right side of the screen")
+                sceneLocationView.moveSceneHeadingClockwise()
+            } else {
+                let image = UIImage(named: "pin")!
+                let annotationNode = LocationAnnotationNode(location: nil, image: image)
+                annotationNode.scaleRelativeToDistance = true
+                sceneLocationView.tagCurrentLocation(with: annotationNode)
             }
         }
     }
@@ -244,26 +239,18 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
     //MARK: MKMapViewDelegate
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        if annotation is MKUserLocation {
-            return nil
+        guard let pointAnnotation = annotation as? MKPointAnnotation else { return nil }
+        let marker = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: nil)
+        marker.displayPriority = .required
+        
+        if pointAnnotation == self.userAnnotation {
+            marker.glyphImage = UIImage(named: "user")
+        } else {
+            marker.markerTintColor = UIColor(hue: 0.267, saturation: 0.67, brightness: 0.77, alpha: 1.0)
+            marker.glyphImage = UIImage(named: "compass")
         }
         
-        if let pointAnnotation = annotation as? MKPointAnnotation {
-            let marker = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: nil)
-            
-            if pointAnnotation == self.userAnnotation {
-                marker.displayPriority = .required
-                marker.glyphImage = UIImage(named: "user")
-            } else {
-                marker.displayPriority = .required
-                marker.markerTintColor = UIColor(hue: 0.267, saturation: 0.67, brightness: 0.77, alpha: 1.0)
-                marker.glyphImage = UIImage(named: "compass")
-            }
-            
-            return marker
-        }
-        
-        return nil
+        return marker
     }
     
     //MARK: SceneLocationViewDelegate
@@ -285,8 +272,7 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
 
 extension DispatchQueue {
     func asyncAfter(timeInterval: TimeInterval, execute: @escaping () -> Void) {
-        self.asyncAfter(
-            deadline: DispatchTime.now() + Double(Int64(timeInterval * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: execute)
+        self.asyncAfter(deadline: DispatchTime.now() + Double(Int64(timeInterval * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: execute)
     }
 }
 

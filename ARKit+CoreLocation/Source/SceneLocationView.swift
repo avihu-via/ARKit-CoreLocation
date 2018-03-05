@@ -35,7 +35,7 @@ public enum LocationEstimationMethod {
 public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
     // The limit to the scene, in terms of what data is considered reasonably accurate.
     // Measured in meters.
-    private static let sceneLimit: CGFloat = 100.0
+    private let sceneLimit: CGFloat = 100.0
     
     public weak var locationDelegate: SceneLocationViewDelegate?
     
@@ -167,7 +167,7 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
     
     private func removeIrrelevantEstimations() {
         guard let currentScenePosition = currentScenePosition else { return }
-        sceneLocationEstimates = sceneLocationEstimates.filter { $0.distance(to: currentScenePosition) <= SceneLocationView.sceneLimit }
+        sceneLocationEstimates = sceneLocationEstimates.filter { $0.distance(to: currentScenePosition) <= sceneLimit }
     }
     
     // The best estimation of location that has been taken
@@ -179,7 +179,6 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
             if $0.realWorldLocation.horizontalAccuracy == $1.realWorldLocation.horizontalAccuracy {
                 return $0.realWorldLocation.timestamp > $1.realWorldLocation.timestamp
             }
-            
             return $0.realWorldLocation.horizontalAccuracy < $1.realWorldLocation.horizontalAccuracy
         }
         
@@ -232,7 +231,7 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
         guard let currentPosition = currentScenePosition else { return }
         
         locationNodes.filter { !$0.confirmedLocation }
-                     .filter { !$0.position.isWithin(distanceOf: SceneLocationView.sceneLimit, from: currentPosition) }
+                     .filter { !$0.position.isWithin(distanceOf: sceneLimit, from: currentPosition) }
                      .forEach { confirmLocation(of: $0) }
     }
     
