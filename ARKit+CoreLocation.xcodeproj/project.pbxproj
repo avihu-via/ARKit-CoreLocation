@@ -21,6 +21,8 @@
 		49A3FC051F0A423800AA59C8 /* CGPoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A3FC041F0A423800AA59C8 /* CGPoint+Extensions.swift */; };
 		49D206F31F124BDD00D7D622 /* SCNNode+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D206F21F124BDD00D7D622 /* SCNNode+Extensions.swift */; };
 		66CFBFE1204DD6D900BF6A80 /* ARKitCoreLocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CFBFE0204DD6D900BF6A80 /* ARKitCoreLocationTests.swift */; };
+		66CFBFEB204DDA1600BF6A80 /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CFBFEA204DDA1600BF6A80 /* Double+Extensions.swift */; };
+		66CFBFED204DDA4600BF6A80 /* CLLocationCoordinate2D+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CFBFEC204DDA4600BF6A80 /* CLLocationCoordinate2D+Extensions.swift */; };
 		71B6A9EDA814C7F42DF123D9 /* Pods_ARKit_CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C10523EF85AA6B7CDF962AD /* Pods_ARKit_CoreLocation.framework */; };
 		D8C205D11F5B197200675E6E /* NotSupportedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C205D01F5B197200675E6E /* NotSupportedViewController.swift */; };
 /* End PBXBuildFile section */
@@ -55,6 +57,8 @@
 		66CFBFDE204DD6D900BF6A80 /* ARKit+CoreLocationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ARKit+CoreLocationTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		66CFBFE0204DD6D900BF6A80 /* ARKitCoreLocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARKitCoreLocationTests.swift; sourceTree = "<group>"; };
 		66CFBFE2204DD6D900BF6A80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		66CFBFEA204DDA1600BF6A80 /* Double+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extensions.swift"; sourceTree = "<group>"; };
+		66CFBFEC204DDA4600BF6A80 /* CLLocationCoordinate2D+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationCoordinate2D+Extensions.swift"; sourceTree = "<group>"; };
 		6C10523EF85AA6B7CDF962AD /* Pods_ARKit_CoreLocation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARKit_CoreLocation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A967016A4C9D5DA8BF8AE438 /* Pods-ARKit+CoreLocation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARKit+CoreLocation.release.xcconfig"; path = "Pods/Target Support Files/Pods-ARKit+CoreLocation/Pods-ARKit+CoreLocation.release.xcconfig"; sourceTree = "<group>"; };
 		D8C205D01F5B197200675E6E /* NotSupportedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotSupportedViewController.swift; sourceTree = "<group>"; };
@@ -148,9 +152,11 @@
 			children = (
 				49A3FBFC1F09B00400AA59C8 /* CLLocation+Extensions.swift */,
 				49099E381F24BAE5007B76FD /* SCNVector3+Extensions.swift */,
-				49A3FC021F09BADB00AA59C8 /* FloatingPoint+Extensions.swift */,
-				49A3FC041F0A423800AA59C8 /* CGPoint+Extensions.swift */,
 				49D206F21F124BDD00D7D622 /* SCNNode+Extensions.swift */,
+				49A3FC041F0A423800AA59C8 /* CGPoint+Extensions.swift */,
+				49A3FC021F09BADB00AA59C8 /* FloatingPoint+Extensions.swift */,
+				66CFBFEA204DDA1600BF6A80 /* Double+Extensions.swift */,
+				66CFBFEC204DDA4600BF6A80 /* CLLocationCoordinate2D+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -322,11 +328,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				49099E391F24BAE5007B76FD /* SCNVector3+Extensions.swift in Sources */,
+				66CFBFEB204DDA1600BF6A80 /* Double+Extensions.swift in Sources */,
 				49A3FBF71F099C8100AA59C8 /* SceneLocationView.swift in Sources */,
 				49A3FC031F09BADB00AA59C8 /* FloatingPoint+Extensions.swift in Sources */,
 				D8C205D11F5B197200675E6E /* NotSupportedViewController.swift in Sources */,
 				49A3FBFF1F09B1D200AA59C8 /* LocationNode.swift in Sources */,
 				49A3FBFD1F09B00400AA59C8 /* CLLocation+Extensions.swift in Sources */,
+				66CFBFED204DDA4600BF6A80 /* CLLocationCoordinate2D+Extensions.swift in Sources */,
 				49A3FC051F0A423800AA59C8 /* CGPoint+Extensions.swift in Sources */,
 				49A3FBE01F09988100AA59C8 /* ViewController.swift in Sources */,
 				49A3FC011F09B9CF00AA59C8 /* SceneLocationEstimate.swift in Sources */,
