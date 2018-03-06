@@ -42,7 +42,7 @@ open class LocationNode: SCNNode {
     
     public init(location: CLLocation?) {
         self.location = location
-        self.confirmedLocation = location != nil
+        confirmedLocation = location != nil
         super.init()
     }
     
@@ -51,7 +51,7 @@ open class LocationNode: SCNNode {
     }
 }
 
-open class LocationAnnotationNode: LocationNode {
+open class ImageAnnotatedLocationNode: LocationNode {
     // An image to use for the annotation
     // When viewed from a distance, the annotation will be seen at the size provided
     // e.g. if the size is 100x100px, the annotation will take up approx 100x100 points on screen.

@@ -316,7 +316,7 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
             node.scale = SCNVector3(x: 1, y: 1, z: 1)
         }
         
-        if let annotationNode = node as? LocationAnnotationNode {
+        if let annotationNode = node as? ImageAnnotatedLocationNode {
             //The scale of a node with a billboard constraint applied is ignored
             //The annotation subnode itself, as a subnode, has the scale applied to it
             let appliedScale = node.scale

@@ -62,7 +62,7 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
         
         //Currently set to Canary Wharf
         let parkHayarkonLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 32.1007717, longitude: 34.8118973), altitude: 17)
-        let pinLocationNode = LocationAnnotationNode(location: parkHayarkonLocation, image: UIImage(named: "pin")!)
+        let pinLocationNode = ImageAnnotatedLocationNode(location: parkHayarkonLocation, image: UIImage(named: "pin")!)
         sceneLocationView.add(confirmedLocationNode: pinLocationNode)
         
         view.addSubview(sceneLocationView)
@@ -205,7 +205,7 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
                 sceneLocationView.moveSceneHeadingClockwise()
             } else {
                 let image = UIImage(named: "pin")!
-                let annotationNode = LocationAnnotationNode(location: nil, image: image)
+                let annotationNode = ImageAnnotatedLocationNode(location: nil, image: image)
                 annotationNode.scaleRelativeToDistance = true
                 sceneLocationView.tagCurrentLocation(with: annotationNode)
             }
