@@ -85,6 +85,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		40C9BF83204EF9FF00BF3CEC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				49A3FBE61F09988100AA59C8 /* LaunchScreen.storyboard */,
+				49A3FBE41F09988100AA59C8 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		40C9BF84204EFA2D00BF3CEC /* Demo */ = {
+			isa = PBXGroup;
+			children = (
+				49A3FBDB1F09988100AA59C8 /* AppDelegate.swift */,
+				49A3FBDF1F09988100AA59C8 /* ViewController.swift */,
+				D8C205D01F5B197200675E6E /* NotSupportedViewController.swift */,
+				40C9BF83204EF9FF00BF3CEC /* Resources */,
+			);
+			path = Demo;
+			sourceTree = "<group>";
+		};
 		49A3FBCF1F09988100AA59C8 = {
 			isa = PBXGroup;
 			children = (
@@ -108,18 +128,14 @@
 		49A3FBDA1F09988100AA59C8 /* ARKit+CoreLocation */ = {
 			isa = PBXGroup;
 			children = (
-				49A3FBF31F099A4A00AA59C8 /* Source */,
-				49A3FBDB1F09988100AA59C8 /* AppDelegate.swift */,
-				49A3FBDF1F09988100AA59C8 /* ViewController.swift */,
-				D8C205D01F5B197200675E6E /* NotSupportedViewController.swift */,
-				49A3FBE41F09988100AA59C8 /* Assets.xcassets */,
-				49A3FBE61F09988100AA59C8 /* LaunchScreen.storyboard */,
+				40C9BF84204EFA2D00BF3CEC /* Demo */,
+				49A3FBF31F099A4A00AA59C8 /* ARCL */,
 				49A3FBE91F09988100AA59C8 /* Info.plist */,
 			);
 			path = "ARKit+CoreLocation";
 			sourceTree = "<group>";
 		};
-		49A3FBF31F099A4A00AA59C8 /* Source */ = {
+		49A3FBF31F099A4A00AA59C8 /* ARCL */ = {
 			isa = PBXGroup;
 			children = (
 				49A3FBF61F099C8100AA59C8 /* SceneLocationView.swift */,
@@ -128,7 +144,7 @@
 				49A3FC001F09B9CF00AA59C8 /* SceneLocationEstimate.swift */,
 				66CFBFE9204DD89500BF6A80 /* Extensions */,
 			);
-			path = Source;
+			path = ARCL;
 			sourceTree = "<group>";
 		};
 		5F8D9F16076E5CEBAA727F10 /* Pods */ = {
@@ -494,7 +510,7 @@
 			baseConfigurationReference = 38104A8494954E9B79241EAE /* Pods-ARKit+CoreLocation.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = JVDG7W5ADH;
+				DEVELOPMENT_TEAM = TU4G3VS6Q2;
 				INFOPLIST_FILE = "ARKit+CoreLocation/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.avihu.via;
@@ -509,7 +525,7 @@
 			baseConfigurationReference = A967016A4C9D5DA8BF8AE438 /* Pods-ARKit+CoreLocation.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = JVDG7W5ADH;
+				DEVELOPMENT_TEAM = TU4G3VS6Q2;
 				INFOPLIST_FILE = "ARKit+CoreLocation/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.avihu.via;
