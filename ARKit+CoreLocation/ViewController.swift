@@ -193,10 +193,10 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
         
         guard let touch = touches.first, touch.view != nil else { return }
         
-        if mapView == touch.view! || mapView.recursiveSubviews().contains(touch.view!) {
+        if mapView == touch.view! || mapView.flatSubviews().contains(touch.view!) {
             centerMapOnUserLocation = false
         } else {
-            let location = touch.location(in: self.view)
+            let location = touch.location(in: view)
             if location.x <= 40 && adjustNorthByTappingSidesOfScreen {
                 print("left side of the screen")
                 sceneLocationView.moveSceneHeadingAntiClockwise()
@@ -247,19 +247,15 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
 }
 
 extension DispatchQueue {
-    func asyncAfter(timeInterval: TimeInterval, execute: @escaping () -> Void) {
-        self.asyncAfter(deadline: DispatchTime.now() + Double(Int64(timeInterval * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: execute)
+    func asyncAfter(timeInterval: TimeInterval, execute block: @escaping () -> Void) {
+        self.asyncAfter(deadline: DispatchTime.now() + Double(Int64(timeInterval * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: block)
     }
 }
 
 extension UIView {
-    func recursiveSubviews() -> [UIView] {
-        var recursiveSubviews = subviews
-        
-        for subview in subviews {
-            recursiveSubviews.append(contentsOf: subview.recursiveSubviews())
-        }
-        
-        return recursiveSubviews
+    func flatSubviews() -> [UIView] {
+        var flatSubviews = subviews
+        subviews.forEach { flatSubviews.append(contentsOf: $0.flatSubviews()) }
+        return flatSubviews
     }
 }
