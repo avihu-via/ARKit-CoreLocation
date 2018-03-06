@@ -13,6 +13,8 @@ import CocoaLumberjack
 
 @available(iOS 11.0, *)
 class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDelegate {
+    private let frameTime = 1.0 / 60.0
+    
     let sceneLocationView = SceneLocationView()
     
     let mapView = MKMapView()
@@ -47,12 +49,7 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
         infoLabel.numberOfLines = 0
         sceneLocationView.addSubview(infoLabel)
         
-        updateInfoLabelTimer = Timer.scheduledTimer(
-            timeInterval: 0.1,
-            target: self,
-            selector: #selector(ViewController.updateInfoLabel),
-            userInfo: nil,
-            repeats: true)
+        updateInfoLabelTimer = Timer.scheduledTimer(timeInterval: frameTime, target: self, selector:  #selector(updateInfoLabel), userInfo: nil, repeats: true)
         
         //Set to true to display an arrow which points north.
         //Checkout the comments in the property description and on the readme on this.
@@ -61,16 +58,11 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
 //        sceneLocationView.locationEstimateMethod = .coreLocationDataOnly
         sceneLocationView.showAxesNode = true
         sceneLocationView.locationDelegate = self
-        
-        if displayDebugging {
-            sceneLocationView.showFeaturePoints = true
-        }
+        sceneLocationView.showFeaturePoints = displayDebugging
         
         //Currently set to Canary Wharf
-        let pinCoordinate = CLLocationCoordinate2D(latitude: 51.504607, longitude: -0.019592)
-        let pinLocation = CLLocation(coordinate: pinCoordinate, altitude: 236)
-        let pinImage = UIImage(named: "pin")!
-        let pinLocationNode = LocationAnnotationNode(location: pinLocation, image: pinImage)
+        let parkHayarkonLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 32.1007717, longitude: 34.8118973), altitude: 17)
+        let pinLocationNode = LocationAnnotationNode(location: parkHayarkonLocation, image: UIImage(named: "pin")!)
         sceneLocationView.add(confirmedLocationNode: pinLocationNode)
         
         view.addSubview(sceneLocationView)
@@ -80,13 +72,7 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
             mapView.showsUserLocation = true
             mapView.alpha = 0.8
             view.addSubview(mapView)
-            
-            updateUserLocationTimer = Timer.scheduledTimer(
-                timeInterval: 0.5,
-                target: self,
-                selector: #selector(ViewController.updateUserLocation),
-                userInfo: nil,
-                repeats: true)
+            updateUserLocationTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(updateUserLocationAsync), userInfo: nil, repeats: true)
         }
         
     }
@@ -108,25 +94,16 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        sceneLocationView.frame = CGRect(
-            x: 0,
-            y: 0,
-            width: self.view.frame.size.width,
-            height: self.view.frame.size.height)
-        
-        infoLabel.frame = CGRect(x: 6, y: 0, width: self.view.frame.size.width - 12, height: 14 * 4)
+        sceneLocationView.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height)
+        infoLabel.frame = CGRect(x: 6, y: 0, width: view.frame.size.width - 12, height: 14 * 4)
         
         if showMapView {
-            infoLabel.frame.origin.y = (self.view.frame.size.height / 2) - infoLabel.frame.size.height
+            infoLabel.frame.origin.y = (view.frame.size.height / 2) - infoLabel.frame.size.height
         } else {
-            infoLabel.frame.origin.y = self.view.frame.size.height - infoLabel.frame.size.height
+            infoLabel.frame.origin.y = view.frame.size.height - infoLabel.frame.size.height
         }
         
-        mapView.frame = CGRect(
-            x: 0,
-            y: self.view.frame.size.height / 2,
-            width: self.view.frame.size.width,
-            height: self.view.frame.size.height / 2)
+        mapView.frame = CGRect(x: 0, y: view.frame.size.height / 2, width: view.frame.size.width, height: view.frame.size.height / 2)
     }
     
     override func didReceiveMemoryWarning() {
@@ -134,57 +111,56 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
         // Release any cached data, images, etc that aren't in use.
     }
     
-    @objc func updateUserLocation() {
-        if let currentLocation = sceneLocationView.currentLocation {
-            DispatchQueue.main.async {
-                if let bestEstimate = self.sceneLocationView.bestLocationEstimate,
-                    let position = self.sceneLocationView.currentScenePosition {
-                    DDLogDebug("")
-                    DDLogDebug("Fetch current location")
-                    DDLogDebug("best location estimate, position: \(bestEstimate.virtualPosition), location: \(bestEstimate.realWorldLocation.coordinate), accuracy: \(bestEstimate.realWorldLocation.horizontalAccuracy), date: \(bestEstimate.realWorldLocation.timestamp)")
-                    DDLogDebug("current position: \(position)")
-                    
-                    let translation = bestEstimate.translatedLocation(to: position)
-                    
-                    DDLogDebug("translation: \(translation)")
-                    DDLogDebug("translated location: \(currentLocation)")
-                    DDLogDebug("")
-                }
-                
-                if self.userAnnotation == nil {
-                    self.userAnnotation = MKPointAnnotation()
-                    self.mapView.addAnnotation(self.userAnnotation!)
-                }
-                
-                UIView.animate(withDuration: 0.5, delay: 0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
-                    self.userAnnotation?.coordinate = currentLocation.coordinate
-                }, completion: nil)
+    @objc private func updateUserLocationAsync() {
+        DispatchQueue.main.async { self.updateUserLocation() }
+    }
+    
+    private func updateUserLocation() {
+        guard let currentLocation = sceneLocationView.currentLocation else { return }
+        
+        if let bestEstimate = sceneLocationView.bestLocationEstimate,
+            let position = sceneLocationView.currentScenePosition {
+            DDLogDebug("")
+            DDLogDebug("Fetch current location")
+            DDLogDebug("best location estimate, position: \(bestEstimate.virtualPosition), location: \(bestEstimate.realWorldLocation.coordinate), accuracy: \(bestEstimate.realWorldLocation.horizontalAccuracy), date: \(bestEstimate.realWorldLocation.timestamp)")
+            DDLogDebug("current position: \(position)")
             
-                if self.centerMapOnUserLocation {
-                    UIView.animate(withDuration: 0.45, delay: 0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
-                        self.mapView.setCenter(self.userAnnotation!.coordinate, animated: false)
-                    }, completion: {
-                        _ in
-                        self.mapView.region.span = MKCoordinateSpan(latitudeDelta: 0.0005, longitudeDelta: 0.0005)
-                    })
+            let translation = bestEstimate.translatedLocation(to: position)
+            
+            DDLogDebug("translation: \(translation)")
+            DDLogDebug("translated location: \(currentLocation)")
+            DDLogDebug("")
+        }
+        
+        if userAnnotation == nil {
+            userAnnotation = MKPointAnnotation()
+            mapView.addAnnotation(self.userAnnotation!)
+        }
+        
+        UIView.animate(withDuration: 0.5, delay: 0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
+            self.userAnnotation?.coordinate = currentLocation.coordinate
+        }, completion: nil)
+        
+        if centerMapOnUserLocation {
+            UIView.animate(withDuration: 0.45, delay: 0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
+                self.mapView.setCenter(self.userAnnotation!.coordinate, animated: false)
+            }, completion: { _ in
+                self.mapView.region.span = MKCoordinateSpan(latitudeDelta: 0.0005, longitudeDelta: 0.0005)
+            })
+        }
+        
+        if displayDebugging {
+            if let bestLocationEstimate = sceneLocationView.bestLocationEstimate {
+                if locationEstimateAnnotation == nil {
+                    locationEstimateAnnotation = MKPointAnnotation()
+                    mapView.addAnnotation(self.locationEstimateAnnotation!)
                 }
                 
-                if self.displayDebugging {
-                    let bestLocationEstimate = self.sceneLocationView.bestLocationEstimate
-                    
-                    if bestLocationEstimate != nil {
-                        if self.locationEstimateAnnotation == nil {
-                            self.locationEstimateAnnotation = MKPointAnnotation()
-                            self.mapView.addAnnotation(self.locationEstimateAnnotation!)
-                        }
-                        
-                        self.locationEstimateAnnotation!.coordinate = bestLocationEstimate!.realWorldLocation.coordinate
-                    } else {
-                        if self.locationEstimateAnnotation != nil {
-                            self.mapView.removeAnnotation(self.locationEstimateAnnotation!)
-                            self.locationEstimateAnnotation = nil
-                        }
-                    }
+                locationEstimateAnnotation!.coordinate = bestLocationEstimate.realWorldLocation.coordinate
+            } else {
+                if locationEstimateAnnotation != nil {
+                    mapView.removeAnnotation(locationEstimateAnnotation!)
+                    locationEstimateAnnotation = nil
                 }
             }
         }
@@ -216,8 +192,8 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
         super.touchesBegan(touches, with: event)
         
         guard let touch = touches.first, touch.view != nil else { return }
-        if (mapView == touch.view! ||
-            mapView.recursiveSubviews().contains(touch.view!)) {
+        
+        if mapView == touch.view! || mapView.recursiveSubviews().contains(touch.view!) {
             centerMapOnUserLocation = false
         } else {
             let location = touch.location(in: self.view)
@@ -278,7 +254,7 @@ extension DispatchQueue {
 
 extension UIView {
     func recursiveSubviews() -> [UIView] {
-        var recursiveSubviews = self.subviews
+        var recursiveSubviews = subviews
         
         for subview in subviews {
             recursiveSubviews.append(contentsOf: subview.recursiveSubviews())
