@@ -36,17 +36,17 @@ public extension CLLocation {
             latitudeTranslation = 0 - distanceLatitude
         }
         
-        let distanceLongitude = self.distance(from: inbetweenLocation)
+        let distanceLongitude = distance(from: inbetweenLocation)
         
         let longitudeTranslation: Double
         
-        if self.coordinate.longitude > inbetweenLocation.coordinate.longitude {
+        if coordinate.longitude > inbetweenLocation.coordinate.longitude {
             longitudeTranslation = 0 - distanceLongitude
         } else {
             longitudeTranslation = distanceLongitude
         }
         
-        let altitudeTranslation = location.altitude - self.altitude
+        let altitudeTranslation = location.altitude - altitude
         
         return LocationTranslation(latitudeTranslation: latitudeTranslation, longitudeTranslation: longitudeTranslation, altitudeTranslation: altitudeTranslation)
     }
