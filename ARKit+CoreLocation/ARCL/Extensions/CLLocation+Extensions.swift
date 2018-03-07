@@ -21,6 +21,10 @@ public extension CLLocation {
         self.init(coordinate: coordinate, altitude: altitude, horizontalAccuracy: 0, verticalAccuracy: 0, timestamp: Date())
     }
     
+    public convenience init(latitude: CLLocationDegrees, longitude: CLLocationDegrees, altitude: CLLocationDistance) {
+        self.init(coordinate: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), altitude: altitude)
+    }
+    
     // Translates distance in meters between two locations.
     // Returns the result as the distance in latitude and distance in longitude.
     public func translation(toLocation location: CLLocation) -> LocationTranslation {

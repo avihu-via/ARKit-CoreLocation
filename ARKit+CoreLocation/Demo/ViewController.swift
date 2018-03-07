@@ -7,7 +7,8 @@
 //
 
 import UIKit
-import SceneKit 
+import CoreData
+import SceneKit
 import MapKit
 import CocoaLumberjack
 
@@ -22,6 +23,8 @@ class ViewController: UIViewController {
     @IBOutlet private var fullWidthDebugContainerConstraint: NSLayoutConstraint!
     @IBOutlet private var addPinVerticalSpacingFromDebugInfoConstraint: NSLayoutConstraint!
     @IBOutlet private var addPinSpaceFromBottomConstraint: NSLayoutConstraint!
+    
+    private var pathPoints: [PathPoint] = []
     
     var updateInfoLabelTimer: Timer?
     
@@ -38,7 +41,8 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         configureSceneLocationView()
         configureUpdateTimers()
-        addInitialPin()
+        fetchStoredPathPoints()
+        addInitialPoints()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -108,11 +112,42 @@ private extension ViewController {
 // MARK: - Private Methods
 
 private extension ViewController {
+    private func fetchStoredPathPoints() {
+        guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
+        let pathPointsFetchRequest = NSFetchRequest<PathPoint>(entityName: "PathPoint")
+        do {
+            pathPoints = try context.fetch(pathPointsFetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch path points. \(error), \(error.userInfo)")
+        }
+        print("Fetched \(pathPoints.count) path points.")
+    }
+    
+    private func removeAllPathPoints() {
+        guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
+        pathPoints.forEach { context.delete($0) }
+        print("All points removed")
+    }
+    
     private func addCurrentLocation() {
+        guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
+        
         let image = UIImage(named: "pin")!
         let annotationNode = ImageAnnotatedLocationNode(location: nil, image: image)
         annotationNode.scaleRelativeToDistance = true
         sceneLocationView.tagCurrentLocation(with: annotationNode)
+        
+        let newPoint = PathPoint(context: context)
+        newPoint.latitude = annotationNode.location.coordinate.latitude
+        newPoint.longitude = annotationNode.location.coordinate.longitude
+        newPoint.altitude = annotationNode.location.altitude
+        
+        do {
+            try context.save()
+            pathPoints.append(newPoint)
+        } catch let error as NSError {
+            print("Had problem saving new point: \(error), \(error.userInfo)")
+        }
     }
     
     private func configureSceneLocationView() {
@@ -130,10 +165,16 @@ private extension ViewController {
         updateInfoLabelTimer = Timer.scheduledTimer(timeInterval: infoLabelRefreshInterval, target: self, selector:  #selector(updateARDebugInfoLabel), userInfo: nil, repeats: true)
     }
     
-    private func addInitialPin() {
-        let parkHayarkonLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 32.1007717, longitude: 34.8118973), altitude: 17)
-        let pinLocationNode = ImageAnnotatedLocationNode(location: parkHayarkonLocation, image: UIImage(named: "pin")!)
-        sceneLocationView.add(confirmedLocationNode: pinLocationNode)
+    private func addInitialPoints() {
+//        let parkHayarkonLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 32.1007717, longitude: 34.8118973), altitude: 17)
+//        let pinLocationNode = ImageAnnotatedLocationNode(location: parkHayarkonLocation, image: UIImage(named: "pin")!)
+//        sceneLocationView.add(confirmedLocationNode: pinLocationNode)
+        
+        pathPoints.forEach { point in
+            let pointLocation = CLLocation(latitude: point.latitude, longitude: point.longitude, altitude: point.altitude)
+            let pointNode = ImageAnnotatedLocationNode(location: pointLocation, image: UIImage(named: "pin")!)
+            sceneLocationView.add(confirmedLocationNode: pointNode)
+        }
     }
     
     private func updateARDebugInfoUI() {
