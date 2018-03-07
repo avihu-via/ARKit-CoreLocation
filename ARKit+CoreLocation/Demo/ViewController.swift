@@ -18,10 +18,19 @@ class ViewController: UIViewController {
     @IBOutlet private weak var sceneLocationView: SceneLocationView!
     @IBOutlet private weak var infoLabel: UILabel!
     
+    @IBOutlet private var smallDebugInfoLabelConstraint: NSLayoutConstraint!
+    @IBOutlet private var fullWidthDebugContainerConstraint: NSLayoutConstraint!
+    
     var updateInfoLabelTimer: Timer?
     
     var adjustNorthByTappingSidesOfScreen = false
-    var showARDebugInfo = false
+    var showARDebugInfo = false {
+        didSet {
+            UIView.animate(withDuration: 0.15) { [weak self] in
+                self?.updateARDebugInfoUI()
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +51,9 @@ class ViewController: UIViewController {
         sceneLocationView.pause()
     }
     
-    @objc func updateInfoLabel() {
+    @objc func updateARDebugInfoLabel() {
+        guard showARDebugInfo else { return }
+        
         if let position = sceneLocationView.currentScenePosition {
             infoLabel.text = "x: \(String(format: "%.2f", position.x)), y: \(String(format: "%.2f", position.y)), z: \(String(format: "%.2f", position.z))\n"
         }
@@ -53,7 +64,7 @@ class ViewController: UIViewController {
         
         if let heading = sceneLocationView.locationManager.heading,
             let accuracy = sceneLocationView.locationManager.headingAccuracy {
-            infoLabel.text!.append("Heading: \(heading)º, accuracy: \(Int(round(accuracy)))º\n")
+            infoLabel.text!.append("Bearing: \(heading)º, accuracy: \(Int(round(accuracy)))º\n")
         }
         
         let date = Date()
@@ -83,7 +94,19 @@ class ViewController: UIViewController {
             sceneLocationView.tagCurrentLocation(with: annotationNode)
         }
     }
-    
+}
+
+// MARK: - Actions
+
+private extension ViewController {
+    @IBAction private func toggleARDebugInfo() {
+        showARDebugInfo = !showARDebugInfo
+    }
+}
+
+// MARK: - Private Methods
+
+private extension ViewController {
     private func configureSceneLocationView() {
         //Set to true to display an arrow which points north.
         //Checkout the comments in the property description and on the readme on this.
@@ -96,13 +119,25 @@ class ViewController: UIViewController {
     }
     
     private func configureUpdateTimers() {
-        updateInfoLabelTimer = Timer.scheduledTimer(timeInterval: infoLabelRefreshInterval, target: self, selector:  #selector(updateInfoLabel), userInfo: nil, repeats: true)
+        updateInfoLabelTimer = Timer.scheduledTimer(timeInterval: infoLabelRefreshInterval, target: self, selector:  #selector(updateARDebugInfoLabel), userInfo: nil, repeats: true)
     }
     
     private func addInitialPin() {
         let parkHayarkonLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 32.1007717, longitude: 34.8118973), altitude: 17)
         let pinLocationNode = ImageAnnotatedLocationNode(location: parkHayarkonLocation, image: UIImage(named: "pin")!)
         sceneLocationView.add(confirmedLocationNode: pinLocationNode)
+    }
+    
+    private func updateARDebugInfoUI() {
+        if showARDebugInfo {
+            smallDebugInfoLabelConstraint.isActive = false
+            fullWidthDebugContainerConstraint.isActive = true
+        } else {
+            smallDebugInfoLabelConstraint.isActive = true
+            fullWidthDebugContainerConstraint.isActive = false
+            infoLabel.text = "Debug"
+        }
+        view.layoutIfNeeded()
     }
 }
     
