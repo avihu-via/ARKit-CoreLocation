@@ -20,6 +20,8 @@ class ViewController: UIViewController {
     
     @IBOutlet private var smallDebugInfoLabelConstraint: NSLayoutConstraint!
     @IBOutlet private var fullWidthDebugContainerConstraint: NSLayoutConstraint!
+    @IBOutlet private var addPinVerticalSpacingFromDebugInfoConstraint: NSLayoutConstraint!
+    @IBOutlet private var addPinSpaceFromBottomConstraint: NSLayoutConstraint!
     
     var updateInfoLabelTimer: Timer?
     
@@ -131,6 +133,8 @@ private extension ViewController {
     private func updateARDebugInfoUI() {
         smallDebugInfoLabelConstraint.isActive = !showARDebugInfo
         fullWidthDebugContainerConstraint.isActive = showARDebugInfo
+        addPinVerticalSpacingFromDebugInfoConstraint.isActive = showARDebugInfo
+        addPinSpaceFromBottomConstraint.isActive = !showARDebugInfo
         if !showARDebugInfo { infoLabel.text = "Debug" }
         view.layoutIfNeeded()
     }
