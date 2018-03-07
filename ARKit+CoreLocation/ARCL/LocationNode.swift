@@ -71,7 +71,7 @@ open class ImageAnnotatedLocationNode: LocationNode {
     public init(location: CLLocation?, image: UIImage) {
         self.image = image
         
-        let plane = SCNPlane(width: image.size.width / 100, height: image.size.height / 100)
+        let plane = SCNPlane(width: image.size.width / 200, height: image.size.height / 200)
         plane.firstMaterial!.diffuse.contents = image
         plane.firstMaterial!.lightingModel = .constant
         
