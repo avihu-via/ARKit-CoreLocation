@@ -51,10 +51,9 @@ open class LocationNode: SCNNode {
     }
 }
 
+// Images will be displayed at half the scale they are given. For every 2pt it will display
+// 1pt on the screen. So a 100pt x 100pt will be displayed as 50pt x 50pt.
 open class ImageAnnotatedLocationNode: LocationNode {
-    // An image to use for the annotation
-    // When viewed from a distance, the annotation will be seen at the size provided
-    // e.g. if the size is 100x100px, the annotation will take up approx 100x100 points on screen.
     public let image: UIImage
     
     // Subnodes and adjustments should be applied to this subnode
