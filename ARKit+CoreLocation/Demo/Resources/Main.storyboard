@@ -26,6 +26,12 @@
                                     <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
+                                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z8k-bL-amI">
+                                            <rect key="frame" x="0.0" y="0.0" width="64" height="64"/>
+                                            <connections>
+                                                <action selector="addCurrentLocationTapped" destination="JPg-rS-Q6A" eventType="touchUpInside" id="wOA-n9-gf1"/>
+                                            </connections>
+                                        </button>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="addPin" translatesAutoresizingMaskIntoConstraints="NO" id="ygj-PX-z4E">
                                             <rect key="frame" x="12" y="12" width="40" height="40"/>
                                         </imageView>
@@ -34,7 +40,11 @@
                                         <constraint firstItem="ygj-PX-z4E" firstAttribute="leading" secondItem="9Mn-n9-taF" secondAttribute="leading" constant="12" id="4Gg-Nk-QtZ"/>
                                         <constraint firstAttribute="trailing" secondItem="ygj-PX-z4E" secondAttribute="trailing" constant="12" id="6H8-1v-0wS"/>
                                         <constraint firstAttribute="bottom" secondItem="ygj-PX-z4E" secondAttribute="bottom" constant="12" id="Cv8-mx-xso"/>
+                                        <constraint firstItem="Z8k-bL-amI" firstAttribute="leading" secondItem="9Mn-n9-taF" secondAttribute="leading" id="GYl-KF-v3P"/>
                                         <constraint firstItem="ygj-PX-z4E" firstAttribute="top" secondItem="9Mn-n9-taF" secondAttribute="top" constant="12" id="Vuh-ug-gdm"/>
+                                        <constraint firstItem="Z8k-bL-amI" firstAttribute="top" secondItem="9Mn-n9-taF" secondAttribute="top" id="bCM-k7-OKz"/>
+                                        <constraint firstAttribute="bottom" secondItem="Z8k-bL-amI" secondAttribute="bottom" id="sSE-x3-okE"/>
+                                        <constraint firstAttribute="trailing" secondItem="Z8k-bL-amI" secondAttribute="trailing" id="sac-bz-n24"/>
                                     </constraints>
                                 </view>
                                 <constraints>

@@ -197,12 +197,19 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
     
     //MARK: Location Nodes
     
-    public func tagCurrentLocation(with node: LocationNode) {
+    public func tagCurrentLocation(with node: LocationNode, andReducedHeight reducedHeight: Bool = false) {
         guard let currentPosition = currentScenePosition, let currentLocation = currentLocation, let sceneNode = self.sceneNode else { return }
         
         node.location = currentLocation
         node.confirmedLocation = locationEstimateMethod == .coreLocationDataOnly
         node.position = currentPosition
+        
+        if reducedHeight {
+            node.position.y -= 1
+            // Cannot easily reduce height, but I want to. In any case this is for testing purposes only,
+            // so it might be chucked away wholesale without needing to correct.
+//            node.location.altitude -= 1
+        }
         
         locationNodes.append(node)
         sceneNode.addChildNode(node)

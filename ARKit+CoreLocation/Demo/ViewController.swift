@@ -89,11 +89,6 @@ class ViewController: UIViewController {
         } else if location.x >= view.frame.size.width - 40 && adjustNorthByTappingSidesOfScreen {
             print("right side of the screen")
             sceneLocationView.moveSceneHeadingClockwise()
-        } else {
-            let image = UIImage(named: "pin")!
-            let annotationNode = ImageAnnotatedLocationNode(location: nil, image: image)
-            annotationNode.scaleRelativeToDistance = true
-            sceneLocationView.tagCurrentLocation(with: annotationNode)
         }
     }
 }
@@ -104,11 +99,22 @@ private extension ViewController {
     @IBAction private func toggleARDebugInfo() {
         showARDebugInfo = !showARDebugInfo
     }
+    
+    @IBAction func addCurrentLocationTapped() {
+        addCurrentLocation()
+    }
 }
 
 // MARK: - Private Methods
 
 private extension ViewController {
+    private func addCurrentLocation() {
+        let image = UIImage(named: "pin")!
+        let annotationNode = ImageAnnotatedLocationNode(location: nil, image: image)
+        annotationNode.scaleRelativeToDistance = true
+        sceneLocationView.tagCurrentLocation(with: annotationNode)
+    }
+    
     private func configureSceneLocationView() {
         //Set to true to display an arrow which points north.
         //Checkout the comments in the property description and on the readme on this.

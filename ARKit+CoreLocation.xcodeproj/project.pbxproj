@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4076DC49205011F200715E21 /* MappingData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4076DC47205011F200715E21 /* MappingData.xcdatamodeld */; };
+		4076DC4A2050131600715E21 /* MappingData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4076DC47205011F200715E21 /* MappingData.xcdatamodeld */; };
 		49099E391F24BAE5007B76FD /* SCNVector3+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49099E381F24BAE5007B76FD /* SCNVector3+Extensions.swift */; };
 		49A3FBDC1F09988100AA59C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A3FBDB1F09988100AA59C8 /* AppDelegate.swift */; };
 		49A3FBE01F09988100AA59C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A3FBDF1F09988100AA59C8 /* ViewController.swift */; };
@@ -94,8 +94,8 @@
 			children = (
 				66D1708D204F4B610025BAC1 /* Main.storyboard */,
 				49A3FBE61F09988100AA59C8 /* LaunchScreen.storyboard */,
-				49A3FBE41F09988100AA59C8 /* Assets.xcassets */,
 				4076DC47205011F200715E21 /* MappingData.xcdatamodeld */,
+				49A3FBE41F09988100AA59C8 /* Assets.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -362,7 +362,7 @@
 				49A3FBFD1F09B00400AA59C8 /* CLLocation+Extensions.swift in Sources */,
 				66CFBFED204DDA4600BF6A80 /* CLLocationCoordinate2D+Extensions.swift in Sources */,
 				49A3FC051F0A423800AA59C8 /* CGPoint+Extensions.swift in Sources */,
-				4076DC49205011F200715E21 /* MappingData.xcdatamodeld in Sources */,
+				4076DC4A2050131600715E21 /* MappingData.xcdatamodeld in Sources */,
 				49A3FBE01F09988100AA59C8 /* ViewController.swift in Sources */,
 				49A3FC011F09B9CF00AA59C8 /* SceneLocationEstimate.swift in Sources */,
 				49A3FBDC1F09988100AA59C8 /* AppDelegate.swift in Sources */,
