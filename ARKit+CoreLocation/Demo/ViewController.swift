@@ -129,14 +129,9 @@ private extension ViewController {
     }
     
     private func updateARDebugInfoUI() {
-        if showARDebugInfo {
-            smallDebugInfoLabelConstraint.isActive = false
-            fullWidthDebugContainerConstraint.isActive = true
-        } else {
-            smallDebugInfoLabelConstraint.isActive = true
-            fullWidthDebugContainerConstraint.isActive = false
-            infoLabel.text = "Debug"
-        }
+        smallDebugInfoLabelConstraint.isActive = !showARDebugInfo
+        fullWidthDebugContainerConstraint.isActive = showARDebugInfo
+        if !showARDebugInfo { infoLabel.text = "Debug" }
         view.layoutIfNeeded()
     }
 }
