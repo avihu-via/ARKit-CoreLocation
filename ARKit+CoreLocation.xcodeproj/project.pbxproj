@@ -514,8 +514,9 @@
 			baseConfigurationReference = 38104A8494954E9B79241EAE /* Pods-ARKit+CoreLocation.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = QNT889H433;
+				DEVELOPMENT_TEAM = TU4G3VS6Q2;
 				INFOPLIST_FILE = "ARKit+CoreLocation/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.avihu.via;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -529,8 +530,9 @@
 			baseConfigurationReference = A967016A4C9D5DA8BF8AE438 /* Pods-ARKit+CoreLocation.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = QNT889H433;
+				DEVELOPMENT_TEAM = TU4G3VS6Q2;
 				INFOPLIST_FILE = "ARKit+CoreLocation/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.avihu.via;
 				PRODUCT_NAME = "$(TARGET_NAME)";

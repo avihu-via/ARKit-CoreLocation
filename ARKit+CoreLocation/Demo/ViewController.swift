@@ -13,9 +13,10 @@ import CocoaLumberjack
 
 @available(iOS 11.0, *)
 class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDelegate {
-    private let frameTime = 1.0 / 60.0
+    private let infoLabelRefreshInterval = 0.1
     
-    let sceneLocationView = SceneLocationView()
+    @IBOutlet private weak var sceneLocationView: SceneLocationView!
+    @IBOutlet private weak var infoLabel: UILabel!
     
     let mapView = MKMapView()
     var userAnnotation: MKPointAnnotation?
@@ -34,7 +35,6 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
     ///The initial value is respected
     var displayDebugging = false
     
-    var infoLabel = UILabel()
     
     var updateInfoLabelTimer: Timer?
     
@@ -43,13 +43,7 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        infoLabel.font = UIFont.systemFont(ofSize: 10)
-        infoLabel.textAlignment = .left
-        infoLabel.textColor = UIColor.white
-        infoLabel.numberOfLines = 0
-        sceneLocationView.addSubview(infoLabel)
-        
-        updateInfoLabelTimer = Timer.scheduledTimer(timeInterval: frameTime, target: self, selector:  #selector(updateInfoLabel), userInfo: nil, repeats: true)
+        updateInfoLabelTimer = Timer.scheduledTimer(timeInterval: infoLabelRefreshInterval, target: self, selector:  #selector(updateInfoLabel), userInfo: nil, repeats: true)
         
         //Set to true to display an arrow which points north.
         //Checkout the comments in the property description and on the readme on this.
@@ -64,8 +58,6 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
         let parkHayarkonLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 32.1007717, longitude: 34.8118973), altitude: 17)
         let pinLocationNode = ImageAnnotatedLocationNode(location: parkHayarkonLocation, image: UIImage(named: "pin")!)
         sceneLocationView.add(confirmedLocationNode: pinLocationNode)
-        
-        view.addSubview(sceneLocationView)
         
         if showMapView {
             mapView.delegate = self
@@ -95,13 +87,6 @@ class ViewController: UIViewController, MKMapViewDelegate, SceneLocationViewDele
         super.viewDidLayoutSubviews()
         
         sceneLocationView.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height)
-        infoLabel.frame = CGRect(x: 6, y: 0, width: view.frame.size.width - 12, height: 14 * 4)
-        
-        if showMapView {
-            infoLabel.frame.origin.y = (view.frame.size.height / 2) - infoLabel.frame.size.height
-        } else {
-            infoLabel.frame.origin.y = view.frame.size.height - infoLabel.frame.size.height
-        }
         
         mapView.frame = CGRect(x: 0, y: view.frame.size.height / 2, width: view.frame.size.width, height: view.frame.size.height / 2)
     }
