@@ -59,7 +59,7 @@
                                 </userDefinedRuntimeAttributes>
                             </visualEffectView>
                             <visualEffectView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rxj-rg-qJQ" userLabel="Debug Info Container">
-                                <rect key="frame" x="16" y="618" width="53.5" height="38"/>
+                                <rect key="frame" x="16" y="609" width="53.5" height="38"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="gHy-kt-mEK">
                                     <rect key="frame" x="0.0" y="0.0" width="53.5" height="38"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -156,7 +156,7 @@
                             <constraint firstItem="zQZ-Ux-ueB" firstAttribute="top" secondItem="shG-PK-FB7" secondAttribute="top" id="AgI-X1-zfA"/>
                             <constraint firstItem="aau-8D-iV6" firstAttribute="trailing" secondItem="rxj-rg-qJQ" secondAttribute="trailing" constant="16" id="KUV-Jq-dC8"/>
                             <constraint firstAttribute="bottom" secondItem="zQZ-Ux-ueB" secondAttribute="bottom" id="QrN-PM-GN5"/>
-                            <constraint firstItem="aau-8D-iV6" firstAttribute="bottom" secondItem="rxj-rg-qJQ" secondAttribute="bottom" constant="11" id="TcN-7q-lQM"/>
+                            <constraint firstItem="aau-8D-iV6" firstAttribute="bottom" secondItem="rxj-rg-qJQ" secondAttribute="bottom" constant="20" id="TcN-7q-lQM"/>
                             <constraint firstItem="zQZ-Ux-ueB" firstAttribute="leading" secondItem="shG-PK-FB7" secondAttribute="leading" id="URe-DZ-1K3"/>
                             <constraint firstItem="rxj-rg-qJQ" firstAttribute="leading" secondItem="aau-8D-iV6" secondAttribute="leading" constant="16" id="WlE-Q4-Mff"/>
                             <constraint firstAttribute="trailing" secondItem="zQZ-Ux-ueB" secondAttribute="trailing" id="aiv-Cq-Hwd"/>
