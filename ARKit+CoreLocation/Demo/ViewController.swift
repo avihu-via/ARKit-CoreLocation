@@ -133,9 +133,7 @@ private extension ViewController {
             let pathPoints = try context.fetch(pathPointsFetchRequest)
             locationPathPoints = locationPathPoints(from: pathPoints)
             print("Fetched \(pathPoints.count) path points.")
-            if let firstPoint = pathPoints.first {
-                print(pathPoints.first)
-            }
+            if let firstPoint = pathPoints.first { print(firstPoint) }
         } catch let error as NSError {
             print("Could not fetch path points. \(error), \(error.userInfo)")
         }
