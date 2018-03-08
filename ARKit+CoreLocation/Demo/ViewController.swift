@@ -133,6 +133,9 @@ private extension ViewController {
             let pathPoints = try context.fetch(pathPointsFetchRequest)
             locationPathPoints = locationPathPoints(from: pathPoints)
             print("Fetched \(pathPoints.count) path points.")
+            if let firstPoint = pathPoints.first {
+                print(pathPoints.first)
+            }
         } catch let error as NSError {
             print("Could not fetch path points. \(error), \(error.userInfo)")
         }
@@ -151,11 +154,16 @@ private extension ViewController {
     
     private func removeAllPathPoints() {
         guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
-        locationPathPoints.forEach { point in
-            context.delete(point.pathPoint)
-            self.sceneLocationView.remove(node: point.locationNode)
+        do {
+            locationPathPoints.forEach { point in
+                context.delete(point.pathPoint)
+                self.sceneLocationView.remove(node: point.locationNode)
+            }
+            try context.save()
+            print("All points removed")
+        } catch let error as NSError {
+            print("Could not delete all points. \(error), \(error.userInfo)")
         }
-        print("All points removed")
     }
     
     private func addCurrentLocation() {
