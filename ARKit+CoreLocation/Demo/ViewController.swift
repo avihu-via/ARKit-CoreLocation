@@ -33,6 +33,8 @@ class ViewController: UIViewController {
     
     private var locationPathPoints: [LocationPathPoint] = []
     
+    private var pathNode: PathNode?
+    
     var updateInfoLabelTimer: Timer?
     
     var adjustNorthByTappingSidesOfScreen = false
@@ -235,7 +237,11 @@ extension ViewController: SceneLocationViewDelegate {
     
     func sceneLocationViewDidSetupSceneNode(_ sceneLocationView: SceneLocationView, sceneNode: SCNNode) {}
     
-    func sceneLocationViewDidUpdateLocationAndNodeScale(_ sceneLocationView: SceneLocationView, node: LocationNode) {}
+    func sceneLocationViewDidUpdateLocationAndNodeScale(_ sceneLocationView: SceneLocationView, node: LocationNode) {
+        guard pathNode == nil && (sceneLocationView.locationNodes.filter { !($0.confirmedLocation) }.count == 0) else { return }
+        pathNode = PathNode.from(pointsSet: sceneLocationView.locationNodes.map { $0.position })
+        sceneLocationView.sceneNode?.addChildNode(pathNode!)
+    }
 }
 
 extension DispatchQueue {

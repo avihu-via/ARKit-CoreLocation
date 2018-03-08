@@ -80,11 +80,22 @@ class VertexNode: SCNNode {
 
 class PathNode: SCNNode {
     static func from(points: SCNVector3...) -> PathNode {
+        return from(pointsSet: points)
+    }
+    
+    static func from(pointsSet points: [SCNVector3]) -> PathNode {
         let pathNode = PathNode()
+        print("Creating path")
+        
+        if let firstPoint = points.first {
+            pathNode.position = firstPoint
+        }
+        
+        points.forEach { print($0) }
         
         // Create vertices
         points.map { VertexNode(position: $0)}
-              .forEach { pathNode.addChildNode($0) }
+            .forEach { pathNode.addChildNode($0) }
         
         // Create edges
         zip(points[..<(points.count-1)], points[1...])
