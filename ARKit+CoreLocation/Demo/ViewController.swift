@@ -153,11 +153,11 @@ private extension ViewController {
     private func removeAllPathPoints() {
         guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
         do {
-            locationPathPoints.forEach { point in
-                context.delete(point.pathPoint)
-                self.sceneLocationView.remove(node: point.locationNode)
-            }
+            let locationNodes = locationPathPoints.map { $0.locationNode }
+            locationPathPoints.forEach { context.delete($0.pathPoint) }
             try context.save()
+            locationNodes.forEach { sceneLocationView.remove(node: $0) }
+            locationPathPoints = []
             print("All points removed")
         } catch let error as NSError {
             print("Could not delete all points. \(error), \(error.userInfo)")
