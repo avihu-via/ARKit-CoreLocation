@@ -35,4 +35,9 @@ extension SCNNode {
         quiverNode.name = "Axes"
         return quiverNode
     }
+    
+    var centroid: SCNVector3 {
+        let (min, max) = boundingBox
+        return (min + max) / 2
+    }
 }
