@@ -9,6 +9,69 @@
 import Foundation
 import CoreLocation
 
+// Mock Location Service Protocol
+
+protocol LocationManagerProvider {
+    var desiredAccuracy: CLLocationAccuracy { get set }
+    var distanceFilter: CLLocationDistance { get set }
+    var headingFilter: CLLocationDegrees { get set }
+    var pausesLocationUpdatesAutomatically: Bool { get set }
+    var delegate: CLLocationManagerDelegate? { get set }
+    var location: CLLocation? { get }
+    
+    static func authorizationStatus() -> CLAuthorizationStatus
+    
+    func startUpdatingHeading()
+    func startUpdatingLocation()
+    func requestWhenInUseAuthorization()
+}
+
+extension CLLocationManager: LocationManagerProvider {}
+
+// Mock Location Service
+
+enum MockLocationSet {
+    case viaTLVOfficeToAzrieli
+    
+    var startLocation: CLLocation {
+        switch self {
+        case .viaTLVOfficeToAzrieli: return CLLocation()
+        }
+    }
+    
+    var pathLocationPoints: [CLLocation] {
+        switch self {
+        case .viaTLVOfficeToAzrieli: return []
+        }
+    }
+}
+
+enum LocationSource {
+    case live
+    case mock(MockLocationSet)
+}
+
+private class MockCLLocationManager: LocationManagerProvider {
+    var mockLocationSet: MockLocationSet = .viaTLVOfficeToAzrieli
+    
+    var desiredAccuracy = kCLLocationAccuracyBest
+    var distanceFilter = kCLDistanceFilterNone
+    var headingFilter = kCLHeadingFilterNone
+    var pausesLocationUpdatesAutomatically = true
+    var location: CLLocation? { return mockLocationSet.startLocation }
+    var delegate: CLLocationManagerDelegate?
+    
+    static func authorizationStatus() -> CLAuthorizationStatus {
+        return .authorizedWhenInUse
+    }
+    
+    func startUpdatingHeading() {}
+    
+    func startUpdatingLocation() {}
+    
+    func requestWhenInUseAuthorization() {}
+}
+
 protocol LocationManagerDelegate: class {
     func locationManagerDidUpdateLocation(_ locationManager: LocationManager, location: CLLocation)
     func locationManagerDidUpdateHeading(_ locationManager: LocationManager, heading: CLLocationDirection, accuracy: CLLocationDirection)
@@ -16,31 +79,19 @@ protocol LocationManagerDelegate: class {
 
 // Handles retrieving the location and heading from CoreLocation
 // Does not contain anything related to ARKit or advanced location
-class LocationManager: NSObject, CLLocationManagerDelegate {
+class LocationManager: NSObject {
     weak var delegate: LocationManagerDelegate?
     
-    private var locationManager: CLLocationManager?
-    
     var currentLocation: CLLocation?
-    
     var heading: CLLocationDirection?
     var headingAccuracy: CLLocationDegrees?
     
+    var source: LocationSource = .live
+    private var locationManager: LocationManagerProvider = CLLocationManager()
+    
     override init() {
         super.init()
-        
-        self.locationManager = CLLocationManager()
-        self.locationManager!.desiredAccuracy = kCLLocationAccuracyBest
-        self.locationManager!.distanceFilter = kCLDistanceFilterNone
-        self.locationManager!.headingFilter = kCLHeadingFilterNone
-        self.locationManager!.pausesLocationUpdatesAutomatically = false
-        self.locationManager!.delegate = self
-        self.locationManager!.startUpdatingHeading()
-        self.locationManager!.startUpdatingLocation()
-        
-        self.locationManager!.requestWhenInUseAuthorization()
-        
-        self.currentLocation = self.locationManager!.location
+        setupLiveLocationManager()
     }
     
     func requestAuthorization() {
@@ -54,37 +105,39 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             return
         }
         
-        self.locationManager?.requestWhenInUseAuthorization()
+        locationManager.requestWhenInUseAuthorization()
     }
+    
+    private func setupLiveLocationManager() {
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.distanceFilter = kCLDistanceFilterNone
+        locationManager.headingFilter = kCLHeadingFilterNone
+        locationManager.pausesLocationUpdatesAutomatically = false
+        locationManager.delegate = self
+        locationManager.startUpdatingHeading()
+        locationManager.startUpdatingLocation()
+        locationManager.requestWhenInUseAuthorization()
+        currentLocation = locationManager.location
+    }
+}
     
     //MARK: - CLLocationManagerDelegate
-    
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        
-    }
+
+extension LocationManager: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {}
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        for location in locations {
-            self.delegate?.locationManagerDidUpdateLocation(self, location: location)
-        }
-        
-        self.currentLocation = manager.location
+        locations.forEach { self.delegate?.locationManagerDidUpdateLocation(self, location: $0) }
+        currentLocation = manager.location
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-        if newHeading.headingAccuracy >= 0 {
-            self.heading = newHeading.trueHeading
-        } else {
-            self.heading = newHeading.magneticHeading
-        }
-        
-        self.headingAccuracy = newHeading.headingAccuracy
-        
-        self.delegate?.locationManagerDidUpdateHeading(self, heading: self.heading!, accuracy: newHeading.headingAccuracy)
+        heading = newHeading.headingAccuracy >= 0 ? newHeading.trueHeading : newHeading.magneticHeading
+        headingAccuracy = newHeading.headingAccuracy
+        delegate?.locationManagerDidUpdateHeading(self, heading: heading!, accuracy: newHeading.headingAccuracy)
     }
     
     func locationManagerShouldDisplayHeadingCalibration(_ manager: CLLocationManager) -> Bool {
         return true
     }
 }
-
