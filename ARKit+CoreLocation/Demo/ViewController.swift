@@ -49,7 +49,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         configureSceneLocationView()
         configureUpdateTimers()
-        fetchStoredPathPoints()
+        presentMockPathPoints()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -126,6 +126,14 @@ private extension ViewController {
 // MARK: - Private Methods
 
 private extension ViewController {
+    private func presentMockPathPoints() {
+        sceneLocationView.locationManager.pathLocationPoints.forEach { point in
+            let pointLocation = CLLocation(latitude: point.coordinate.latitude, longitude: point.coordinate.longitude, altitude: point.altitude)
+            let pointNode = ImageAnnotatedLocationNode(location: pointLocation, image: UIImage(named: "pin")!)
+            sceneLocationView.add(confirmedLocationNode: pointNode)
+        }
+    }
+    
     private func fetchStoredPathPoints() {
         guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
         let pathPointsFetchRequest = NSFetchRequest<PathPoint>(entityName: "PathPoint")

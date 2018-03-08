@@ -135,9 +135,12 @@ class LocationManager: NSObject {
                 locationManager = CLLocationManager()
             case .mock(let mockSet):
                 locationManager = CLLocationManagerMock(mockLocationSet: mockSet)
+                pathLocationPoints = mockSet.pathLocationPoints
             }
         }
     }
+    
+    private(set) var pathLocationPoints: [CLLocation] = MockLocationSet.viaTLVOfficeToAzrieli.pathLocationPoints
     
     private var locationManager: LocationManagerProvider = CLLocationManagerMock(mockLocationSet: .viaTLVOfficeToAzrieli)
     
