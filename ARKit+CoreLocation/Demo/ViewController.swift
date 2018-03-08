@@ -38,7 +38,7 @@ class ViewController: UIViewController {
     var adjustNorthByTappingSidesOfScreen = false
     var showARDebugInfo = false {
         didSet {
-            resetButtonContainer.isHidden = !showARDebugInfo
+//            resetButtonContainer.isHidden = !showARDebugInfo
             UIView.animate(withDuration: 0.15) { [weak self] in
                 self?.updateARDebugInfoUI()
             }
@@ -214,7 +214,7 @@ private extension ViewController {
         fullWidthDebugContainerConstraint.isActive = showARDebugInfo
         addPinVerticalSpacingFromDebugInfoConstraint.isActive = showARDebugInfo
         addPinSpaceFromBottomConstraint.isActive = !showARDebugInfo
-        resetButtonContainer.alpha = showARDebugInfo ? 1 : 0
+//        resetButtonContainer.alpha = showARDebugInfo ? 1 : 0
         if !showARDebugInfo { infoLabel.text = "Debug" }
         view.layoutIfNeeded()
     }
