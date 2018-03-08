@@ -318,7 +318,7 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
             }
         } else {
             //Calculates distance based on the distance within the scene, as the location isn't yet confirmed
-            adjustedDistance = Double(currentPosition.distance(to: node.position))
+            adjustedDistance = Double(currentPosition.planarDistance(to: node.position))
             
             node.scale = SCNVector3(x: 1, y: 1, z: 1)
         }

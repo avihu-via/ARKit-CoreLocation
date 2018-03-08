@@ -14,7 +14,7 @@ extension SCNVector3 {
     }
     
     // Doesn't include the y axis, matches functionality of CLLocation 'distance' function.
-    func distance(to vector: SCNVector3) -> Float {
+    func planarDistance(to vector: SCNVector3) -> Float {
         return sqrt(pow(vector.x - x, 2) + pow(vector.z - z, 2))
     }
     
