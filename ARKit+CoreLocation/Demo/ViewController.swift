@@ -11,6 +11,12 @@ import CoreData
 import SceneKit
 import MapKit
 import CocoaLumberjack
+import ARKit
+
+struct LocationPathPoint {
+    let pathPoint: PathPoint
+    let locationNode: LocationNode
+}
 
 @available(iOS 11.0, *)
 class ViewController: UIViewController {
@@ -18,19 +24,21 @@ class ViewController: UIViewController {
     
     @IBOutlet private weak var sceneLocationView: SceneLocationView!
     @IBOutlet private weak var infoLabel: UILabel!
+    @IBOutlet private weak var resetButtonContainer: UIVisualEffectView!
     
     @IBOutlet private var smallDebugInfoLabelConstraint: NSLayoutConstraint!
     @IBOutlet private var fullWidthDebugContainerConstraint: NSLayoutConstraint!
     @IBOutlet private var addPinVerticalSpacingFromDebugInfoConstraint: NSLayoutConstraint!
     @IBOutlet private var addPinSpaceFromBottomConstraint: NSLayoutConstraint!
     
-    private var pathPoints: [PathPoint] = []
+    private var locationPathPoints: [LocationPathPoint] = []
     
     var updateInfoLabelTimer: Timer?
     
     var adjustNorthByTappingSidesOfScreen = false
     var showARDebugInfo = false {
         didSet {
+            resetButtonContainer.isHidden = !showARDebugInfo
             UIView.animate(withDuration: 0.15) { [weak self] in
                 self?.updateARDebugInfoUI()
             }
@@ -42,7 +50,6 @@ class ViewController: UIViewController {
         configureSceneLocationView()
         configureUpdateTimers()
         fetchStoredPathPoints()
-        addInitialPoints()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -68,16 +75,19 @@ class ViewController: UIViewController {
             infoLabel.text!.append("Euler x: \(String(format: "%.2f", eulerAngles.x)), y: \(String(format: "%.2f", eulerAngles.y)), z: \(String(format: "%.2f", eulerAngles.z))\n")
         }
         
-        if let heading = sceneLocationView.locationManager.heading,
-            let accuracy = sceneLocationView.locationManager.headingAccuracy {
-            infoLabel.text!.append("Bearing: \(heading)º, accuracy: \(Int(round(accuracy)))º\n")
+        if let heading = sceneLocationView.locationManager.heading, let accuracy = sceneLocationView.locationManager.headingAccuracy {
+            infoLabel.text!.append("Heading: \(heading)º, accuracy: \(Int(round(accuracy)))º\n")
+        }
+        
+        if let currentLocation = sceneLocationView.currentLocation {
+            infoLabel.text!.append(contentsOf: "Lat: \(currentLocation.coordinate.latitude), Lng: \(currentLocation.coordinate.longitude), Alt: \(currentLocation.altitude) | Accuracy: H: \(currentLocation.horizontalAccuracy), V: \(currentLocation.verticalAccuracy)\n")
         }
         
         let date = Date()
         let comp = Calendar.current.dateComponents([.hour, .minute, .second, .nanosecond], from: date)
         
         if let hour = comp.hour, let minute = comp.minute, let second = comp.second, let nanosecond = comp.nanosecond {
-            infoLabel.text!.append("\(String(format: "%02d", hour)):\(String(format: "%02d", minute)):\(String(format: "%02d", second)):\(String(format: "%03d", nanosecond / 1000000))")
+            infoLabel.text!.append("Time: \(String(format: "%02d", hour)):\(String(format: "%02d", minute)):\(String(format: "%02d", second)):\(String(format: "%03d", nanosecond / 1000000))")
         }
     }
     
@@ -100,6 +110,10 @@ class ViewController: UIViewController {
 // MARK: - Actions
 
 private extension ViewController {
+    @IBAction func resetPathTapped() {
+        removeAllPathPoints()
+    }
+    
     @IBAction private func toggleARDebugInfo() {
         showARDebugInfo = !showARDebugInfo
     }
@@ -116,16 +130,31 @@ private extension ViewController {
         guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
         let pathPointsFetchRequest = NSFetchRequest<PathPoint>(entityName: "PathPoint")
         do {
-            pathPoints = try context.fetch(pathPointsFetchRequest)
+            let pathPoints = try context.fetch(pathPointsFetchRequest)
+            locationPathPoints = locationPathPoints(from: pathPoints)
+            print("Fetched \(pathPoints.count) path points.")
         } catch let error as NSError {
             print("Could not fetch path points. \(error), \(error.userInfo)")
         }
-        print("Fetched \(pathPoints.count) path points.")
+    }
+    
+    private func locationPathPoints(from pathPoints: [PathPoint]) -> [LocationPathPoint] {
+        var points: [LocationPathPoint] = []
+        pathPoints.forEach { point in
+            let pointLocation = CLLocation(latitude: point.latitude, longitude: point.longitude, altitude: point.altitude)
+            let pointNode = ImageAnnotatedLocationNode(location: pointLocation, image: UIImage(named: "pin")!)
+            sceneLocationView.add(confirmedLocationNode: pointNode)
+            points.append(LocationPathPoint(pathPoint: point, locationNode: pointNode))
+        }
+        return points
     }
     
     private func removeAllPathPoints() {
         guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
-        pathPoints.forEach { context.delete($0) }
+        locationPathPoints.forEach { point in
+            context.delete(point.pathPoint)
+            self.sceneLocationView.remove(node: point.locationNode)
+        }
         print("All points removed")
     }
     
@@ -144,7 +173,7 @@ private extension ViewController {
         
         do {
             try context.save()
-            pathPoints.append(newPoint)
+            locationPathPoints.append(LocationPathPoint(pathPoint: newPoint, locationNode: annotationNode))
         } catch let error as NSError {
             print("Had problem saving new point: \(error), \(error.userInfo)")
         }
@@ -165,23 +194,13 @@ private extension ViewController {
         updateInfoLabelTimer = Timer.scheduledTimer(timeInterval: infoLabelRefreshInterval, target: self, selector:  #selector(updateARDebugInfoLabel), userInfo: nil, repeats: true)
     }
     
-    private func addInitialPoints() {
-//        let parkHayarkonLocation = CLLocation(coordinate: CLLocationCoordinate2D(latitude: 32.1007717, longitude: 34.8118973), altitude: 17)
-//        let pinLocationNode = ImageAnnotatedLocationNode(location: parkHayarkonLocation, image: UIImage(named: "pin")!)
-//        sceneLocationView.add(confirmedLocationNode: pinLocationNode)
-        
-        pathPoints.forEach { point in
-            let pointLocation = CLLocation(latitude: point.latitude, longitude: point.longitude, altitude: point.altitude)
-            let pointNode = ImageAnnotatedLocationNode(location: pointLocation, image: UIImage(named: "pin")!)
-            sceneLocationView.add(confirmedLocationNode: pointNode)
-        }
-    }
-    
     private func updateARDebugInfoUI() {
+        sceneLocationView.debugOptions = showARDebugInfo ? [ARSCNDebugOptions.showFeaturePoints] : []
         smallDebugInfoLabelConstraint.isActive = !showARDebugInfo
         fullWidthDebugContainerConstraint.isActive = showARDebugInfo
         addPinVerticalSpacingFromDebugInfoConstraint.isActive = showARDebugInfo
         addPinSpaceFromBottomConstraint.isActive = !showARDebugInfo
+        resetButtonContainer.alpha = showARDebugInfo ? 1 : 0
         if !showARDebugInfo { infoLabel.text = "Debug" }
         view.layoutIfNeeded()
     }

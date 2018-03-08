@@ -30,7 +30,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         super.init()
         
         self.locationManager = CLLocationManager()
-        self.locationManager!.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        self.locationManager!.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager!.distanceFilter = kCLDistanceFilterNone
         self.locationManager!.headingFilter = kCLHeadingFilterNone
         self.locationManager!.pausesLocationUpdatesAutomatically = false
