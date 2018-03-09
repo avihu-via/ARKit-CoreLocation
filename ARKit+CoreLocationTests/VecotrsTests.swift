@@ -9,5 +9,7 @@
 import XCTest
 
 class VectorsTests: XCTestCase {
-    func testSum() {}
+    func testNumericArraySum() {
+        XCTAssert(true)
+    }
 }

@@ -8,4 +8,6 @@
 
 import XCTest
 
-class CLLocationExtensionsTests: XCTestCase {}
+class CLLocationExtensionsTests: XCTestCase {
+    func testStub() { XCTAssert(true) }
+}

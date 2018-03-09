@@ -9,4 +9,5 @@
 import XCTest
 
 class ARKitCoreLocationTests: XCTestCase {
+    func testStub() { XCTAssert(true) }
 }

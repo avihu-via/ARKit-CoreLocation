@@ -10,7 +10,7 @@ import SceneKit
 
 infix operator ⨯
 
-private extension Array where Element: Numeric {
+extension Array where Element: Numeric {
     func sum() -> Element { return reduce(0, +) }
 }
 
