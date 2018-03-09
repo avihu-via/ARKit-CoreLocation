@@ -28,7 +28,6 @@ protocol Vector {
     func dot(_ vector: Self) -> Float
     
     static func ‧(lhs: Self, rhs: Self) -> Float
-    static func ⨯(lhs: Self, rhs: Self) -> Self
     
     var components: [Float] { get set }
     var dimensions: UInt8 { get }
@@ -70,16 +69,8 @@ extension Vector {
         return zip(components, vector.components).map(*).sum()
     }
     
-    func cross(_ vector: Self) -> Self {
-        return Self(components: components)
-    }
-    
     static func ‧(lhs: Self, rhs: Self) -> Float {
         return lhs.dot(rhs)
-    }
-    
-    static func ⨯(lhs: Self, rhs: Self) -> Self {
-        return lhs.cross(rhs)
     }
     
     var magnitude: Float {
