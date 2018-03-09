@@ -56,6 +56,7 @@ class EdgeNode: SCNNode {
     
     private func setupNode() {
         edgeBox.firstMaterial?.diffuse.contents = pathColor
+        edgeBox.firstMaterial?.lightingModel = .blinn
         geometry = edgeBox
     }
 }
@@ -80,6 +81,7 @@ class VertexNode: SCNNode {
     
     private func setupNode() {
         cylinder.firstMaterial?.diffuse.contents = pathVertexColor
+        cylinder.firstMaterial?.lightingModel = .blinn
         geometry = cylinder
     }
 }

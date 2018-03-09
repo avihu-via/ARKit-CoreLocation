@@ -52,6 +52,7 @@ class ViewController: UIViewController {
         configureSceneLocationView()
         configureUpdateTimers()
         presentMockPathPoints()
+        configureSceneLighting()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -206,6 +207,37 @@ private extension ViewController {
         sceneLocationView.showFeaturePoints = showARDebugInfo
     }
     
+    private func configureSceneLighting() {
+        sceneLocationView.scene.rootNode.addChildNode(createSunlightNode())
+        sceneLocationView.scene.rootNode.addChildNode(createAmbientLightNode())
+    }
+    
+    private func createSunlightNode() -> SCNNode {
+        let sunlight = SCNLight()
+        sunlight.type = .directional
+        sunlight.color = UIColor.white
+        sunlight.intensity = 1500
+        sunlight.castsShadow = true
+        let sunlightNode = SCNNode()
+        sunlightNode.scale = SCNVector3(1,1,1)
+        sunlightNode.position = SCNVector3Zero
+        sunlightNode.light = sunlight
+        sunlightNode.eulerAngles = SCNVector3(-60,-25,35)
+        return sunlightNode
+    }
+    
+    private func createAmbientLightNode() -> SCNNode {
+        let ambientLight = SCNLight()
+        ambientLight.type = .ambient
+        ambientLight.color = UIColor.white
+        ambientLight.intensity = 200
+        let ambientLightNode = SCNNode()
+        ambientLightNode.scale = SCNVector3(1,1,1)
+        ambientLightNode.position = SCNVector3Zero
+        ambientLightNode.light = ambientLight
+        return ambientLightNode
+    }
+    
     private func configureUpdateTimers() {
         updateInfoLabelTimer = Timer.scheduledTimer(timeInterval: infoLabelRefreshInterval, target: self, selector:  #selector(updateARDebugInfoLabel), userInfo: nil, repeats: true)
     }
@@ -240,7 +272,7 @@ extension ViewController: SceneLocationViewDelegate {
     func sceneLocationViewDidUpdateLocationAndNodeScale(_ sceneLocationView: SceneLocationView, node: LocationNode) {
         guard pathNode == nil && (sceneLocationView.locationNodes.filter { !($0.confirmedLocation) }.count == 0) else { return }
         pathNode = PathNode.from(pointsSet: sceneLocationView.locationNodes.map { $0.position })
-        sceneLocationView.sceneNode?.addChildNode(pathNode!)
+        sceneLocationView.scene.rootNode.addChildNode(pathNode!)
     }
 }
 
