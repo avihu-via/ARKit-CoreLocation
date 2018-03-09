@@ -91,18 +91,12 @@ class PathNode: SCNNode {
     
     static func from(pointsSet points: [SCNVector3]) -> PathNode {
         let pathNode = PathNode()
-        print("Creating path")
         
         if let firstPoint = points.first {
             pathNode.position = firstPoint
         }
         
-        points.forEach { print($0) }
-        
-        // Create vertices
         pathNode.addChildNodes(points.map { VertexNode(position: $0)})
-        
-        // Create edges
         pathNode.addChildNodes(zip(points[..<(points.count-1)], points[1...]).map { EdgeNode(pointsPair: $0) })
         
         return pathNode
