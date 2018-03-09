@@ -18,6 +18,12 @@ let pathInitialVertexRadius: CGFloat = 1.2
 let pathColor: UIColor = .cyan
 let pathVertexColor: UIColor = .purple
 
+private extension SCNNode {
+    func addChildNodes(_ nodes: [SCNNode]) {
+        nodes.forEach { addChildNode($0) }
+    }
+}
+
 class EdgeNode: SCNNode {
     private let edgeBox = SCNBox(width: pathWidth, height: pathHeight, length: 0, chamferRadius: 0)
     
@@ -94,13 +100,10 @@ class PathNode: SCNNode {
         points.forEach { print($0) }
         
         // Create vertices
-        points.map { VertexNode(position: $0)}
-            .forEach { pathNode.addChildNode($0) }
+        pathNode.addChildNodes(points.map { VertexNode(position: $0)})
         
         // Create edges
-        zip(points[..<(points.count-1)], points[1...])
-            .map { EdgeNode(pointsPair: $0) }
-            .forEach { pathNode.addChildNode($0) }
+        pathNode.addChildNodes(zip(points[..<(points.count-1)], points[1...]).map { EdgeNode(pointsPair: $0) })
         
         return pathNode
     }
