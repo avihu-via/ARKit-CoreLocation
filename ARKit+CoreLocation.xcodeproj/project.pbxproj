@@ -27,6 +27,7 @@
 		66CFBFED204DDA4600BF6A80 /* CLLocationCoordinate2D+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CFBFEC204DDA4600BF6A80 /* CLLocationCoordinate2D+Extensions.swift */; };
 		66CFBFEF204DDF7400BF6A80 /* CLLocationExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66CFBFEE204DDF7400BF6A80 /* CLLocationExtensionsTests.swift */; };
 		66D1708E204F4B610025BAC1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66D1708D204F4B610025BAC1 /* Main.storyboard */; };
+		66D170902052B97D0025BAC1 /* VecotrsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66D1708F2052B97D0025BAC1 /* VecotrsTests.swift */; };
 		71B6A9EDA814C7F42DF123D9 /* Pods_ARKit_CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C10523EF85AA6B7CDF962AD /* Pods_ARKit_CoreLocation.framework */; };
 		D8C205D11F5B197200675E6E /* NotSupportedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C205D01F5B197200675E6E /* NotSupportedViewController.swift */; };
 /* End PBXBuildFile section */
@@ -67,6 +68,7 @@
 		66CFBFEC204DDA4600BF6A80 /* CLLocationCoordinate2D+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationCoordinate2D+Extensions.swift"; sourceTree = "<group>"; };
 		66CFBFEE204DDF7400BF6A80 /* CLLocationExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationExtensionsTests.swift; sourceTree = "<group>"; };
 		66D1708D204F4B610025BAC1 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		66D1708F2052B97D0025BAC1 /* VecotrsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VecotrsTests.swift; sourceTree = "<group>"; };
 		6C10523EF85AA6B7CDF962AD /* Pods_ARKit_CoreLocation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARKit_CoreLocation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A967016A4C9D5DA8BF8AE438 /* Pods-ARKit+CoreLocation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARKit+CoreLocation.release.xcconfig"; path = "Pods/Target Support Files/Pods-ARKit+CoreLocation/Pods-ARKit+CoreLocation.release.xcconfig"; sourceTree = "<group>"; };
 		D8C205D01F5B197200675E6E /* NotSupportedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotSupportedViewController.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 				66CFBFE0204DD6D900BF6A80 /* ARKitCoreLocationTests.swift */,
 				66CFBFEE204DDF7400BF6A80 /* CLLocationExtensionsTests.swift */,
 				66CFBFE2204DD6D900BF6A80 /* Info.plist */,
+				66D1708F2052B97D0025BAC1 /* VecotrsTests.swift */,
 			);
 			path = "ARKit+CoreLocationTests";
 			sourceTree = "<group>";
@@ -379,6 +382,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66D170902052B97D0025BAC1 /* VecotrsTests.swift in Sources */,
 				66CFBFE1204DD6D900BF6A80 /* ARKitCoreLocationTests.swift in Sources */,
 				66CFBFEF204DDF7400BF6A80 /* CLLocationExtensionsTests.swift in Sources */,
 			);

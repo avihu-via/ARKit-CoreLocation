@@ -8,6 +8,8 @@
 
 import SceneKit
 
+infix operator ⨯
+
 private extension Array where Element: Numeric {
     func sum() -> Element { return reduce(0, +) }
 }
@@ -24,8 +26,12 @@ protocol Vector {
     
     func dot(_ vector: Self) -> Float
     
+    static func ·(lhs: Self, rhs: Self) -> Float
+    static func ⨯(lhs: Self, rhs: Self) -> Self
+    
     var components: [Float] { get set }
-    var dimensions: Int { get }
+    var dimensions: UInt8 { get }
+    subscript(index: UInt8) -> Float { get set }
     
     var magnitude: Float { get }
     
@@ -52,7 +58,7 @@ extension Vector {
     }
     
     static func ==(lhs: Self, rhs: Self) -> Bool {
-        return zip(lhs.components, rhs.components).map(==).reduce(true) { $0 && $1 }
+        return lhs.components == rhs.components
     }
     
     static func midpoint(from origin: Self, to destination: Self) -> Self {
@@ -61,6 +67,18 @@ extension Vector {
     
     func dot(_ vector: Self) -> Float {
         return zip(components, vector.components).map(*).sum()
+    }
+    
+    func cross(_ vector: Self) -> Self {
+        return Self(components: components)
+    }
+    
+    static func ·(lhs: Self, rhs: Self) -> Float {
+        return lhs.dot(rhs)
+    }
+    
+    static func ⨯(lhs: Self, rhs: Self) -> Self {
+        return lhs.cross(rhs)
     }
     
     var magnitude: Float {
@@ -90,7 +108,26 @@ extension SCNVector3: Vector {
         }
     }
     
-    var dimensions: Int { return 3 }
+    var dimensions: UInt8 { return 3 }
+    
+    subscript(index: UInt8) -> Float {
+        get {
+            switch index {
+            case 0: return x
+            case 1: return y
+            case 2: return z
+            default: fatalError("Index out of range")
+            }
+        }
+        set {
+            switch index {
+            case 0: x = newValue
+            case 1: y = newValue
+            case 2: z = newValue
+            default: fatalError("Indedx out of range")
+            }
+        }
+    }
 }
 
 extension SCNVector4: Vector {
@@ -107,7 +144,28 @@ extension SCNVector4: Vector {
         }
     }
     
-    var dimensions: Int { return 4 }
+    var dimensions: UInt8 { return 4 }
+    
+    subscript(index: UInt8) -> Float {
+        get {
+            switch index {
+            case 0: return x
+            case 1: return y
+            case 2: return z
+            case 3: return w
+            default: fatalError("Index out of range")
+            }
+        }
+        set {
+            switch index {
+            case 0: x = newValue
+            case 1: y = newValue
+            case 2: z = newValue
+            case 3: z = newValue
+            default: fatalError("Index out of range")
+            }
+        }
+    }
 }
 
 
