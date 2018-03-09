@@ -270,7 +270,7 @@ extension ViewController: SceneLocationViewDelegate {
     func sceneLocationViewDidSetupSceneNode(_ sceneLocationView: SceneLocationView, sceneNode: SCNNode) {}
     
     func sceneLocationViewDidUpdateLocationAndNodeScale(_ sceneLocationView: SceneLocationView, node: LocationNode) {
-        guard pathNode == nil && (sceneLocationView.locationNodes.filter { !($0.confirmedLocation) }.count == 0) else { return }
+        guard pathNode == nil && (sceneLocationView.locationNodes.filter { !($0.position != SCNVector3Zero) }.count == 0) else { return }
         pathNode = PathNode.from(pointsSet: sceneLocationView.locationNodes.map { $0.position })
         sceneLocationView.scene.rootNode.addChildNode(pathNode!)
     }
