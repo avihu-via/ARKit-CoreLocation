@@ -19,10 +19,28 @@ protocol Vector {
     var components: [Float] { get }
     var magnitude: Float { get }
     
+    init(components: [Float])
+    
     func distance(to vec: Self) -> Float
 }
 
 extension Vector {
+    static func -(lhs: Self, rhs: Self) -> Self {
+        return Self(components: zip(lhs.components, rhs.components).map { $0 - $1 })
+    }
+    
+    static func +(lhs: Self, rhs: Self) -> Self {
+        return Self(components: zip(lhs.components, rhs.components).map { $0 + $1 })
+    }
+    
+    static func *(lhs: Self, rhs: Self) -> Self {
+        return Self(components: zip(lhs.components, rhs.components).map { $0 * $1 })
+    }
+    
+    static func /(lhs: Self, rhs: Float) -> Self {
+        return Self(components: lhs.components.map { $0 / rhs })
+    }
+    
     static func midpoint(from origin: Self, to destination: Self) -> Self {
         return (origin + destination) / 2
     }
@@ -50,23 +68,12 @@ extension SCNVector3: Vector {
         return asPoint.distance(to: vector.asPoint) <= distance
     }
     
-    static func -(lhs: SCNVector3, rhs: SCNVector3) -> SCNVector3 {
-        return SCNVector3(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z)
-    }
-    
-    static func +(lhs: SCNVector3, rhs: SCNVector3) -> SCNVector3 {
-        return SCNVector3(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z)
-    }
-    
-    static func *(lhs: SCNVector3, rhs: SCNVector3) -> SCNVector3 {
-        return SCNVector3(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z)
-    }
-    
-    static func /(lhs: SCNVector3, rhs: Float) -> SCNVector3 {
-        return SCNVector3(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs)
-    }
-    
     var components: [Float] {
         return [x, y, z]
+    }
+    
+    init(components: [Float]) {
+        guard components.count == 3 else { fatalError("Tried to initialize SCNVector3 with \(components.count) components instead of 3") }
+        self.init(components[0], components[1], components[2])
     }
 }
