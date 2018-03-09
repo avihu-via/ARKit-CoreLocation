@@ -77,3 +77,14 @@ extension SCNVector3: Vector {
         self.init(components[0], components[1], components[2])
     }
 }
+
+extension SCNVector4: Vector {
+    var components: Float {
+        return [x, y, z, w]
+    }
+    
+    init(components: [Float]) {
+        guard components.count == 4 else { fatalError("Tried to initialize SCNVector4 with \(componenets.count) components instead of 4") }
+        self.init(components[0], components[1], components[2], components[3])
+    }
+}
