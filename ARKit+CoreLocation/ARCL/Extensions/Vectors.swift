@@ -9,6 +9,7 @@
 import SceneKit
 
 infix operator ⨯
+infix operator ‧
 
 extension Array where Element: Numeric {
     func sum() -> Element { return reduce(0, +) }
@@ -26,7 +27,7 @@ protocol Vector {
     
     func dot(_ vector: Self) -> Float
     
-    static func ·(lhs: Self, rhs: Self) -> Float
+    static func ‧(lhs: Self, rhs: Self) -> Float
     static func ⨯(lhs: Self, rhs: Self) -> Self
     
     var components: [Float] { get set }
@@ -57,7 +58,7 @@ extension Vector {
         return Self(components: lhs.components.map { $0 / rhs })
     }
     
-    static func ==(lhs: Self, rhs: Self) -> Bool {
+    public static func ==(lhs: Self, rhs: Self) -> Bool {
         return lhs.components == rhs.components
     }
     
@@ -73,7 +74,7 @@ extension Vector {
         return Self(components: components)
     }
     
-    static func ·(lhs: Self, rhs: Self) -> Float {
+    static func ‧(lhs: Self, rhs: Self) -> Float {
         return lhs.dot(rhs)
     }
     
@@ -130,6 +131,8 @@ extension SCNVector3: Vector {
     }
 }
 
+extension SCNVector3: Equatable {}
+
 extension SCNVector4: Vector {
     var components: [Float] {
         get {
@@ -168,6 +171,7 @@ extension SCNVector4: Vector {
     }
 }
 
+extension SCNVector4: Equatable {}
 
 // MARK: - ARCL SCNVector3 Extensions
 
