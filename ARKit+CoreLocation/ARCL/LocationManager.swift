@@ -142,7 +142,7 @@ class LocationManager: NSObject {
     
     private(set) var pathLocationPoints: [CLLocation] = MockLocationSet.viaTLVOfficeToAzrieli.pathLocationPoints
     
-    private var locationManager: LocationManagerProvider = CLLocationManagerMock(mockLocationSet: .viaTLVOfficeToAzrieli)
+    private var locationManager: LocationManagerProvider = CLLocationManager()
     
     override init() {
         super.init()

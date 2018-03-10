@@ -114,7 +114,7 @@ class ViewController: UIViewController {
 
 private extension ViewController {
     @IBAction func resetPathTapped() {
-        removeAllPathPoints()
+        removeAllMarkedLocations()
     }
     
     @IBAction private func toggleARDebugInfo() {
@@ -122,15 +122,16 @@ private extension ViewController {
     }
     
     @IBAction func addCurrentLocationTapped() {
-        addCurrentLocation()
+        markCurrentLocation()
     }
 }
 
 // MARK: - Private Methods
+// Here be Dragons
 
 private extension ViewController {
     private func presentMockPathPoints() {
-        sceneLocationView.locationManager.pathLocationPoints.forEach { point in
+        MockLocationSet.viaTLVOfficeToAzrieli.pathLocationPoints.forEach { point in
             let pointLocation = CLLocation(latitude: point.coordinate.latitude, longitude: point.coordinate.longitude, altitude: point.altitude)
             let pointNode = ImageAnnotatedLocationNode(location: pointLocation, image: UIImage(named: "pin")!)
             sceneLocationView.add(confirmedLocationNode: pointNode)
@@ -142,7 +143,7 @@ private extension ViewController {
         let pathPointsFetchRequest = NSFetchRequest<PathPoint>(entityName: "PathPoint")
         do {
             let pathPoints = try context.fetch(pathPointsFetchRequest)
-            locationPathPoints = locationPathPoints(from: pathPoints)
+            locationPathPoints = makeLocationPathPoints(from: pathPoints)
             print("Fetched \(pathPoints.count) path points.")
             if let firstPoint = pathPoints.first { print(firstPoint) }
         } catch let error as NSError {
@@ -150,7 +151,7 @@ private extension ViewController {
         }
     }
     
-    private func locationPathPoints(from pathPoints: [PathPoint]) -> [LocationPathPoint] {
+    private func makeLocationPathPoints(from pathPoints: [PathPoint]) -> [LocationPathPoint] {
         var points: [LocationPathPoint] = []
         pathPoints.forEach { point in
             let pointLocation = CLLocation(latitude: point.latitude, longitude: point.longitude, altitude: point.altitude)
@@ -161,7 +162,7 @@ private extension ViewController {
         return points
     }
     
-    private func removeAllPathPoints() {
+    private func removeAllMarkedLocations() {
         guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
         do {
             let locationNodes = locationPathPoints.map { $0.locationNode }
@@ -175,7 +176,7 @@ private extension ViewController {
         }
     }
     
-    private func addCurrentLocation() {
+    private func markCurrentLocation() {
         guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
         
         let image = UIImage(named: "pin")!
