@@ -61,10 +61,12 @@ extension CLLocationManager: LocationManagerProvider {}
 enum MockLocationSet {
     case viaTLVOfficeToAzrieli
     case insideViaTLVOffice
+    case viaTLVOfficeToDixie
     
     var startLocation: CLLocation {
         switch self {
         case .viaTLVOfficeToAzrieli: return CLLocation(latitude: 32.0723327, longitude: 34.7953844)
+        case .viaTLVOfficeToDixie: return CLLocation()
         case .insideViaTLVOffice: return CLLocation(latitude: 32.073183, longitude: 34.797094)
         }
     }
@@ -72,6 +74,7 @@ enum MockLocationSet {
     var startHeading: CLHeadingCompatible {
         switch self {
         case .viaTLVOfficeToAzrieli: return CLHeadingMock(trueHeading: 200)
+        case .viaTLVOfficeToDixie: return CLHeadingMock(trueHeading: 0)
         case .insideViaTLVOffice: return CLHeadingMock(trueHeading: 0)
         }
     }
@@ -85,6 +88,8 @@ enum MockLocationSet {
                 CLLocation(latitude: 32.0723249, longitude: 34.7945177),
                 CLLocation(latitude: 32.0728956, longitude: 34.7934293)
             ]
+            
+        case .viaTLVOfficeToDixie: return []
             
         case .insideViaTLVOffice: return [
                 CLLocation(latitude: 32.073208, longitude: 34.797100),

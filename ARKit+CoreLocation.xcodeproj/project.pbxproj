@@ -8,8 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		0F59D7BF705D2D4AE2EEED6A /* Pods_ARKit_CoreLocation_ARKit_CoreLocationTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED8958E724C677D51130E723 /* Pods_ARKit_CoreLocation_ARKit_CoreLocationTests.framework */; };
+		404EC6D420557AB100940DBB /* PickUp.scn in Resources */ = {isa = PBXBuildFile; fileRef = 404EC6D320557AB100940DBB /* PickUp.scn */; };
 		4076DC4A2050131600715E21 /* MappingData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4076DC47205011F200715E21 /* MappingData.xcdatamodeld */; };
 		4076DC6F2051C9BC00715E21 /* PathGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4076DC6E2051C9BC00715E21 /* PathGeometry.swift */; };
+		4077533B205578E00084EDFF /* models.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 4077533A205578E00084EDFF /* models.scnassets */; };
 		49099E391F24BAE5007B76FD /* Vectors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49099E381F24BAE5007B76FD /* Vectors.swift */; };
 		49A3FBDC1F09988100AA59C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A3FBDB1F09988100AA59C8 /* AppDelegate.swift */; };
 		49A3FBE01F09988100AA59C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A3FBDF1F09988100AA59C8 /* ViewController.swift */; };
@@ -63,8 +65,10 @@
 /* Begin PBXFileReference section */
 		28C73E9A99996C1758A537DE /* Pods-ARKit+CoreLocation-ARKit+CoreLocationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARKit+CoreLocation-ARKit+CoreLocationTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ARKit+CoreLocation-ARKit+CoreLocationTests/Pods-ARKit+CoreLocation-ARKit+CoreLocationTests.debug.xcconfig"; sourceTree = "<group>"; };
 		38104A8494954E9B79241EAE /* Pods-ARKit+CoreLocation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARKit+CoreLocation.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ARKit+CoreLocation/Pods-ARKit+CoreLocation.debug.xcconfig"; sourceTree = "<group>"; };
+		404EC6D320557AB100940DBB /* PickUp.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = PickUp.scn; sourceTree = "<group>"; };
 		4076DC48205011F200715E21 /* MappingData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MappingData.xcdatamodel; sourceTree = "<group>"; };
 		4076DC6E2051C9BC00715E21 /* PathGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathGeometry.swift; sourceTree = "<group>"; };
+		4077533A205578E00084EDFF /* models.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = models.scnassets; sourceTree = "<group>"; };
 		49099E381F24BAE5007B76FD /* Vectors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vectors.swift; sourceTree = "<group>"; };
 		49A3FBD81F09988100AA59C8 /* ARKit+CoreLocation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ARKit+CoreLocation.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49A3FBDB1F09988100AA59C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -116,9 +120,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		402FD72F205570A50088E630 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				4077533A205578E00084EDFF /* models.scnassets */,
+				404EC6D320557AB100940DBB /* PickUp.scn */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		40C9BF83204EF9FF00BF3CEC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				402FD72F205570A50088E630 /* Models */,
 				66D1708D204F4B610025BAC1 /* Main.storyboard */,
 				49A3FBE61F09988100AA59C8 /* LaunchScreen.storyboard */,
 				4076DC47205011F200715E21 /* MappingData.xcdatamodeld */,
@@ -316,8 +330,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				66D170A22053173D0025BAC1 /* sandbox.scn in Resources */,
+				4077533B205578E00084EDFF /* models.scnassets in Resources */,
 				66D1708E204F4B610025BAC1 /* Main.storyboard in Resources */,
 				49A3FBE81F09988100AA59C8 /* LaunchScreen.storyboard in Resources */,
+				404EC6D420557AB100940DBB /* PickUp.scn in Resources */,
 				49A3FBE51F09988100AA59C8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
