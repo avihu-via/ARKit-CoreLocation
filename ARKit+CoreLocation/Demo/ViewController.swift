@@ -244,12 +244,13 @@ private extension ViewController {
     }
     
     private func updateARDebugInfoUI() {
-        sceneLocationView.debugOptions = showARDebugInfo ? [ARSCNDebugOptions.showFeaturePoints] : []
+        // For some reason this started crashing the app when removing debug points since Beta 4.
+//        sceneLocationView.debugOptions = showARDebugInfo ? [ARSCNDebugOptions.showFeaturePoints] : []
         smallDebugInfoLabelConstraint.isActive = !showARDebugInfo
         fullWidthDebugContainerConstraint.isActive = showARDebugInfo
         addPinVerticalSpacingFromDebugInfoConstraint.isActive = showARDebugInfo
         addPinSpaceFromBottomConstraint.isActive = !showARDebugInfo
-//        resetButtonContainer.alpha = showARDebugInfo ? 1 : 0
+        resetButtonContainer.alpha = showARDebugInfo ? 1 : 0
         if !showARDebugInfo { infoLabel.text = "Debug" }
         view.layoutIfNeeded()
     }
