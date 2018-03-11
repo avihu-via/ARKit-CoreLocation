@@ -60,16 +60,19 @@ extension CLLocationManager: LocationManagerProvider {}
 
 enum MockLocationSet {
     case viaTLVOfficeToAzrieli
+    case insideViaTLVOffice
     
     var startLocation: CLLocation {
         switch self {
         case .viaTLVOfficeToAzrieli: return CLLocation(latitude: 32.0723327, longitude: 34.7953844)
+        case .insideViaTLVOffice: return CLLocation(latitude: 32.073183, longitude: 34.797094)
         }
     }
     
     var startHeading: CLHeadingCompatible {
         switch self {
         case .viaTLVOfficeToAzrieli: return CLHeadingMock(trueHeading: 200)
+        case .insideViaTLVOffice: return CLHeadingMock(trueHeading: 0)
         }
     }
     
@@ -81,6 +84,13 @@ enum MockLocationSet {
                 CLLocation(latitude: 32.0724242, longitude: 34.7946299),
                 CLLocation(latitude: 32.0723249, longitude: 34.7945177),
                 CLLocation(latitude: 32.0728956, longitude: 34.7934293)
+            ]
+            
+        case .insideViaTLVOffice: return [
+                CLLocation(latitude: 32.073208, longitude: 34.797100),
+                CLLocation(latitude: 32.073231, longitude: 34.797110),
+                CLLocation(latitude: 32.073271, longitude: 34.797138
+            )
             ]
         }
     }
@@ -128,7 +138,7 @@ class LocationManager: NSObject {
     var heading: CLLocationDirection?
     var headingAccuracy: CLLocationDegrees?
     
-    var source: LocationSource = .mock(.viaTLVOfficeToAzrieli) {
+    var source: LocationSource = .mock(.insideViaTLVOffice) {
         didSet {
             switch source {
             case .live:
@@ -142,7 +152,7 @@ class LocationManager: NSObject {
     
     private(set) var pathLocationPoints: [CLLocation] = MockLocationSet.viaTLVOfficeToAzrieli.pathLocationPoints
     
-    private var locationManager: LocationManagerProvider = CLLocationManager()
+    private var locationManager: LocationManagerProvider = CLLocationManagerMock(mockLocationSet: .insideViaTLVOffice)
     
     override init() {
         super.init()

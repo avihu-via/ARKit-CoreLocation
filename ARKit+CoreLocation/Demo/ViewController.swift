@@ -131,7 +131,7 @@ private extension ViewController {
 
 private extension ViewController {
     private func presentMockPathPoints() {
-        MockLocationSet.viaTLVOfficeToAzrieli.pathLocationPoints.forEach { point in
+        MockLocationSet.insideViaTLVOffice.pathLocationPoints.forEach { point in
             let pointLocation = CLLocation(latitude: point.coordinate.latitude, longitude: point.coordinate.longitude, altitude: point.altitude)
             let pointNode = ImageAnnotatedLocationNode(location: pointLocation, image: UIImage(named: "pin")!)
             sceneLocationView.add(confirmedLocationNode: pointNode)
@@ -244,7 +244,7 @@ private extension ViewController {
     }
     
     private func updateARDebugInfoUI() {
-        // For some reason this started crashing the app when removing debug points since Beta 4.
+        // For some reason this started crashing the app when removing debug points since Xcode 9.3 Beta 4.
 //        sceneLocationView.debugOptions = showARDebugInfo ? [ARSCNDebugOptions.showFeaturePoints] : []
         smallDebugInfoLabelConstraint.isActive = !showARDebugInfo
         fullWidthDebugContainerConstraint.isActive = showARDebugInfo
