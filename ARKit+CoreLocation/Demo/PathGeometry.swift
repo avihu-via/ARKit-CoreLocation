@@ -86,21 +86,43 @@ class VertexNode: SCNNode {
     }
 }
 
+class TerminatorVertexNode: SCNReferenceNode {
+    convenience init(position: SCNVector3) {
+        self.init()
+        self.position = position
+        print("Creating terminator node")
+        guard let modelURL = Bundle.main.url(forResource: "models.scnassets", withExtension: nil)?.appendingPathComponent("PickUp.scn") else { fatalError("No PickUp model file.") }
+        print("Loading model from URL: \(modelURL.absoluteString)")
+        referenceURL = modelURL
+        load()
+    }
+}
+
 class PathNode: SCNNode {
-    static func from(points: SCNVector3...) -> PathNode {
-        return from(pointsSet: points)
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     
-    static func from(pointsSet points: [SCNVector3]) -> PathNode {
-        let pathNode = PathNode()
+    override init() {
+        super.init()
+    }
+    
+    convenience init(fromPoints points: SCNVector3...) {
+        self.init(fromPointsSet: points)
+    }
+    
+    convenience init(fromPointsSet points: [SCNVector3]) {
+        self.init()
         
         if let firstPoint = points.first {
-            pathNode.position = firstPoint
+            position = firstPoint
         }
         
-        pathNode.addChildNodes(points.map { VertexNode(position: $0)})
-        pathNode.addChildNodes(zip(points[..<(points.count-1)], points[1...]).map { EdgeNode(pointsPair: $0) })
+        addChildNodes(points.map { VertexNode(position: $0)})
+        addChildNodes(zip(points[..<(points.count-1)], points[1...]).map { EdgeNode(pointsPair: $0) })
         
-        return pathNode
+        if let lastPoint = points.last {
+            addChildNode(TerminatorVertexNode(position: lastPoint))
+        }
     }
 }
