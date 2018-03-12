@@ -46,9 +46,10 @@ public extension CLLocation {
     public func translatedLocation(using translation: LocationTranslation) -> CLLocation {
         return CLLocation(
             coordinate: CLLocationCoordinate2D(
-                latitude: self.coordinate.coordinate(withBearingDegrees: 0, distanceMeters: translation.latitude).latitude,
-                longitude: self.coordinate.coordinate(withBearingDegrees: 90, distanceMeters: translation.longitude).longitude),
-            altitude: self.altitude + translation.altitude,
-            horizontalAccuracy: self.horizontalAccuracy, verticalAccuracy: self.verticalAccuracy, timestamp: self.timestamp)
+                latitude: coordinate.coordinate(withBearingDegrees: 0, distanceMeters: translation.latitude).latitude,
+                longitude: coordinate.coordinate(withBearingDegrees: 90, distanceMeters: translation.longitude).longitude),
+            altitude: altitude + translation.altitude,
+            horizontalAccuracy: horizontalAccuracy,
+            verticalAccuracy: verticalAccuracy, timestamp: timestamp)
     }
 }

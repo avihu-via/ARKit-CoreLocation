@@ -279,7 +279,7 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
         
         let locationNodeLocation = location(of: node)
         
-        //Position is set to a position coordinated via the current position
+        // Position is set to a position coordinated via the current position
         let locationTranslation = currentLocation.translation(toLocation: locationNodeLocation)
         let adjustedDistance: CLLocationDistance
         let distance = locationNodeLocation.distance(from: currentLocation)
