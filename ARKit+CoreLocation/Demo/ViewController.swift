@@ -133,7 +133,7 @@ private extension ViewController {
     private func presentMockPathPoints() {
         MockLocationSet.insideViaTLVOffice.pathLocationPoints.forEach { point in
             let pointLocation = CLLocation(latitude: point.coordinate.latitude, longitude: point.coordinate.longitude, altitude: point.altitude)
-            let pointNode = ImageAnnotatedLocationNode(location: pointLocation, image: UIImage(named: "pin")!)
+            let pointNode = LocationNode(location: pointLocation)
             sceneLocationView.add(confirmedLocationNode: pointNode)
         }
     }
