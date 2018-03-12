@@ -203,9 +203,9 @@ private extension ViewController {
         //        sceneLocationView.orientToTrueNorth = false
         
         //        sceneLocationView.locationEstimateMethod = .coreLocationDataOnly
-        sceneLocationView.showAxesNode = true
+        sceneLocationView.showAxesNode = false
         sceneLocationView.locationDelegate = self
-        sceneLocationView.showFeaturePoints = showARDebugInfo
+//        sceneLocationView.showFeaturePoints = showARDebugInfo
     }
     
     private func configureSceneLighting() {
@@ -217,8 +217,9 @@ private extension ViewController {
         let sunlight = SCNLight()
         sunlight.type = .directional
         sunlight.color = UIColor.white
-        sunlight.intensity = 1500
+        sunlight.intensity = 4000
         sunlight.castsShadow = true
+        sunlight.shadowRadius = 2
         let sunlightNode = SCNNode()
         sunlightNode.scale = SCNVector3(1,1,1)
         sunlightNode.position = SCNVector3Zero

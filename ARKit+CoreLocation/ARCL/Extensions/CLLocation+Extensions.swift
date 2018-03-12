@@ -11,9 +11,9 @@ import CoreLocation
 
 // Translation in meters between 2 locations
 public struct LocationTranslation {
-    public var latitudeTranslation: Double
-    public var longitudeTranslation: Double
-    public var altitudeTranslation: Double
+    public var latitude: Double
+    public var longitude: Double
+    public var altitude: Double
 }
 
 public extension CLLocation {
@@ -28,39 +28,27 @@ public extension CLLocation {
     // Translates distance in meters between two locations.
     // Returns the result as the distance in latitude and distance in longitude.
     public func translation(toLocation location: CLLocation) -> LocationTranslation {
-        let inbetweenLocation = CLLocation(latitude: self.coordinate.latitude, longitude: location.coordinate.longitude)
+        let inbetweenLocation = CLLocation(latitude: coordinate.latitude, longitude: location.coordinate.longitude)
         
-        let distanceLatitude = location.distance(from: inbetweenLocation)
-        
-        let latitudeTranslation: Double
-        
-        if location.coordinate.latitude > inbetweenLocation.coordinate.latitude {
-            latitudeTranslation = distanceLatitude
-        } else {
-            latitudeTranslation = 0 - distanceLatitude
+        var latitudeDelta = location.distance(from: inbetweenLocation)
+        if location.coordinate.latitude < inbetweenLocation.coordinate.latitude {
+            latitudeDelta = -latitudeDelta
         }
         
-        let distanceLongitude = distance(from: inbetweenLocation)
-        
-        let longitudeTranslation: Double
-        
+        var longitudeDelta = distance(from: inbetweenLocation)
         if coordinate.longitude > inbetweenLocation.coordinate.longitude {
-            longitudeTranslation = 0 - distanceLongitude
-        } else {
-            longitudeTranslation = distanceLongitude
+            longitudeDelta = -longitudeDelta
         }
         
-        let altitudeTranslation = location.altitude - altitude
-        
-        return LocationTranslation(latitudeTranslation: latitudeTranslation, longitudeTranslation: longitudeTranslation, altitudeTranslation: altitudeTranslation)
+        return LocationTranslation(latitude: latitudeDelta, longitude: longitudeDelta, altitude: location.altitude - altitude)
     }
     
     public func translatedLocation(using translation: LocationTranslation) -> CLLocation {
         return CLLocation(
             coordinate: CLLocationCoordinate2D(
-                latitude: self.coordinate.coordinate(withBearingDegrees: 0, distanceMeters: translation.latitudeTranslation).latitude,
-                longitude: self.coordinate.coordinate(withBearingDegrees: 90, distanceMeters: translation.longitudeTranslation).longitude),
-            altitude: self.altitude + translation.altitudeTranslation,
+                latitude: self.coordinate.coordinate(withBearingDegrees: 0, distanceMeters: translation.latitude).latitude,
+                longitude: self.coordinate.coordinate(withBearingDegrees: 90, distanceMeters: translation.longitude).longitude),
+            altitude: self.altitude + translation.altitude,
             horizontalAccuracy: self.horizontalAccuracy, verticalAccuracy: self.verticalAccuracy, timestamp: self.timestamp)
     }
 }

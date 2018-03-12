@@ -261,11 +261,9 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
     }
     
     func updatePositionAndScaleOfLocationNodes() {
-        for locationNode in locationNodes {
-            if locationNode.continuallyUpdatePositionAndScale {
-                updatePositionAndScale(of: locationNode, animated: true)
-            }
-        }
+        locationNodes
+            .filter { $0.continuallyUpdatePositionAndScale }
+            .forEach { updatePositionAndScale(of: $0, animated: true) }
     }
     
     public func updatePositionAndScale(of node: LocationNode, initialSetup: Bool = false, animated: Bool = false, duration: TimeInterval = 0.1) {
@@ -294,9 +292,9 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
                 adjustedDistance = distance * Double(scale)
                 
                 let adjustedTranslation = SCNVector3(
-                    x: Float(locationTranslation.longitudeTranslation) * scale,
-                    y: Float(locationTranslation.altitudeTranslation) * scale,
-                    z: Float(locationTranslation.latitudeTranslation) * scale)
+                    x: Float(locationTranslation.longitude) * scale,
+                    y: Float(locationTranslation.altitude) * scale,
+                    z: Float(locationTranslation.latitude) * scale)
                 
                 let position = SCNVector3(
                     x: currentPosition.x + adjustedTranslation.x,
@@ -309,9 +307,9 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
             } else {
                 adjustedDistance = distance
                 let position = SCNVector3(
-                    x: currentPosition.x + Float(locationTranslation.longitudeTranslation),
-                    y: currentPosition.y + Float(locationTranslation.altitudeTranslation),
-                    z: currentPosition.z - Float(locationTranslation.latitudeTranslation))
+                    x: currentPosition.x + Float(locationTranslation.longitude),
+                    y: currentPosition.y + Float(locationTranslation.altitude),
+                    z: currentPosition.z - Float(locationTranslation.latitude))
                 
                 node.position = position
                 node.scale = SCNVector3(x: 1, y: 1, z: 1)

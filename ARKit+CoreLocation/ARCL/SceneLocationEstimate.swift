@@ -21,9 +21,9 @@ struct SceneLocationEstimate {
     // Compares the location's position to another position, to determine the translation between them
     func locationTranslation(to position: SCNVector3) -> LocationTranslation {
         return LocationTranslation(
-            latitudeTranslation: Double(self.virtualPosition.z - position.z),
-            longitudeTranslation: Double(position.x - self.virtualPosition.x),
-            altitudeTranslation: Double(position.y - self.virtualPosition.y))
+            latitude: Double(self.virtualPosition.z - position.z),
+            longitude: Double(position.x - self.virtualPosition.x),
+            altitude: Double(position.y - self.virtualPosition.y))
     }
     
     // Translates the location by comparing with a given position
