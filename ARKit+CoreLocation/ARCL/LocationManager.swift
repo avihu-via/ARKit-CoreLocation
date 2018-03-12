@@ -164,7 +164,7 @@ class LocationManager: NSObject {
         return locationManager.pathLocationPoints
     }
     
-    private var locationManager: LocationManagerProvider = CLLocationManagerMock(mockLocationSet: .viaTLVOfficeAroundTheCornerToIgalAlon)
+    private var locationManager: LocationManagerProvider = CLLocationManagerMock(mockLocationSet: .insideViaTLVOffice)
     
     override init() {
         super.init()

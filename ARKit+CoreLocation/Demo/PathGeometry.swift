@@ -90,11 +90,23 @@ class TerminatorVertexNode: SCNReferenceNode {
     convenience init(position: SCNVector3) {
         self.init()
         self.position = position
-        print("Creating terminator node")
+        loadGeometry()
+        startRotationAnimation()
+    }
+    
+    private func loadGeometry() {
         guard let modelURL = Bundle.main.url(forResource: "models.scnassets", withExtension: nil)?.appendingPathComponent("PickUp.scn") else { fatalError("No PickUp model file.") }
-        print("Loading model from URL: \(modelURL.absoluteString)")
         referenceURL = modelURL
         load()
+    }
+    
+    private func startRotationAnimation() {
+        let rotation = CABasicAnimation(keyPath: "rotation")
+        rotation.fromValue = NSValue(scnVector4: SCNVector4(0, 0, 0, 0))
+        rotation.toValue = NSValue(scnVector4: SCNVector4(0, 1, 0, CGFloat(2 * Double.pi)))
+        rotation.duration = 10
+        rotation.repeatCount = .infinity
+        addAnimation(rotation, forKey: "inifite rotation")
     }
 }
 
