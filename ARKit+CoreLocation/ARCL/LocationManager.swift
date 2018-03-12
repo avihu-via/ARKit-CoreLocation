@@ -47,6 +47,8 @@ protocol LocationManagerProvider {
     var delegate: CLLocationManagerDelegate? { get set }
     var location: CLLocation? { get }
     
+    var pathLocationPoints: [CLLocation] { get }
+    
     static func authorizationStatus() -> CLAuthorizationStatus
     
     func startUpdatingHeading()
@@ -54,19 +56,23 @@ protocol LocationManagerProvider {
     func requestWhenInUseAuthorization()
 }
 
-extension CLLocationManager: LocationManagerProvider {}
+extension CLLocationManager: LocationManagerProvider {
+    var pathLocationPoints: [CLLocation] {
+        return []
+    }
+}
 
 // Mock Location Service
 
 enum MockLocationSet {
     case viaTLVOfficeToAzrieli
     case insideViaTLVOffice
-    case viaTLVOfficeToDixie
+    case viaTLVOfficeAroundTheCornerToIgalAlon
     
     var startLocation: CLLocation {
         switch self {
         case .viaTLVOfficeToAzrieli: return CLLocation(latitude: 32.0723327, longitude: 34.7953844)
-        case .viaTLVOfficeToDixie: return CLLocation()
+        case .viaTLVOfficeAroundTheCornerToIgalAlon: return CLLocation(latitude: 32.073159, longitude: 34.796919)
         case .insideViaTLVOffice: return CLLocation(latitude: 32.073183, longitude: 34.797094)
         }
     }
@@ -74,7 +80,7 @@ enum MockLocationSet {
     var startHeading: CLHeadingCompatible {
         switch self {
         case .viaTLVOfficeToAzrieli: return CLHeadingMock(trueHeading: 200)
-        case .viaTLVOfficeToDixie: return CLHeadingMock(trueHeading: 0)
+        case .viaTLVOfficeAroundTheCornerToIgalAlon: return CLHeadingMock(trueHeading: 0)
         case .insideViaTLVOffice: return CLHeadingMock(trueHeading: 0)
         }
     }
@@ -89,7 +95,14 @@ enum MockLocationSet {
                 CLLocation(latitude: 32.0728956, longitude: 34.7934293)
             ]
             
-        case .viaTLVOfficeToDixie: return []
+        case .viaTLVOfficeAroundTheCornerToIgalAlon: return [
+                CLLocation(latitude: 32.073114, longitude: 34.796890),
+                CLLocation(latitude: 32.073405, longitude: 34.795985),
+                CLLocation(latitude: 32.073527, longitude: 34.795599),
+                CLLocation(latitude: 32.073674, longitude: 34.795146),
+                CLLocation(latitude: 32.073755, longitude: 34.795177),
+                CLLocation(latitude: 32.073845, longitude: 34.795213)
+            ]
             
         case .insideViaTLVOffice: return [
                 CLLocation(latitude: 32.073208, longitude: 34.797100),
@@ -107,7 +120,7 @@ enum LocationSource {
 }
 
 private class CLLocationManagerMock: LocationManagerProvider {
-    var mockLocationSet: MockLocationSet = .viaTLVOfficeToAzrieli
+    var mockLocationSet: MockLocationSet
     
     var desiredAccuracy = kCLLocationAccuracyBest
     var distanceFilter = kCLDistanceFilterNone
@@ -115,6 +128,10 @@ private class CLLocationManagerMock: LocationManagerProvider {
     var pausesLocationUpdatesAutomatically = true
     var location: CLLocation? { return mockLocationSet.startLocation }
     var delegate: CLLocationManagerDelegate?
+    
+    var pathLocationPoints: [CLLocation] {
+        return mockLocationSet.pathLocationPoints
+    }
     
     static func authorizationStatus() -> CLAuthorizationStatus {
         return .authorizedWhenInUse
@@ -143,21 +160,11 @@ class LocationManager: NSObject {
     var heading: CLLocationDirection?
     var headingAccuracy: CLLocationDegrees?
     
-    var source: LocationSource = .mock(.insideViaTLVOffice) {
-        didSet {
-            switch source {
-            case .live:
-                locationManager = CLLocationManager()
-            case .mock(let mockSet):
-                locationManager = CLLocationManagerMock(mockLocationSet: mockSet)
-                pathLocationPoints = mockSet.pathLocationPoints
-            }
-        }
+    var pathLocationPoints: [CLLocation] {
+        return locationManager.pathLocationPoints
     }
     
-    private(set) var pathLocationPoints: [CLLocation] = MockLocationSet.viaTLVOfficeToAzrieli.pathLocationPoints
-    
-    private var locationManager: LocationManagerProvider = CLLocationManagerMock(mockLocationSet: .insideViaTLVOffice)
+    private var locationManager: LocationManagerProvider = CLLocationManagerMock(mockLocationSet: .viaTLVOfficeAroundTheCornerToIgalAlon)
     
     override init() {
         super.init()
