@@ -15,8 +15,8 @@ let pathVertexHeight: CGFloat = pathHeight + 0.05
 let pathVertexRadius: CGFloat = 0.5
 let pathInitialVertexRadius: CGFloat = 1.2
 
-let pathColor: UIColor = .cyan
-let pathVertexColor: UIColor = .purple
+let pathColor: UIColor = UIColor(red: 0.11, green: 0.69, blue: 0.90, alpha: 1.00)
+let pathVertexColor: UIColor = UIColor(red: 1.00, green: 0.47, blue: 0.01, alpha: 1.00)
 
 private extension SCNNode {
     func addChildNodes(_ nodes: [SCNNode]) {
@@ -81,7 +81,6 @@ class VertexNode: SCNNode {
     
     private func setupNode() {
         cylinder.firstMaterial?.diffuse.contents = pathVertexColor
-        cylinder.firstMaterial?.lightingModel = .blinn
         geometry = cylinder
     }
 }

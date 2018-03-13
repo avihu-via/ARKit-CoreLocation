@@ -282,9 +282,19 @@ extension ViewController: SceneLocationViewDelegate {
     
     func sceneLocationView(_ sceneLocationView: SceneLocationView, updateAtTime time: TimeInterval) {
         guard let anchor = planeAnchors.first, let anchorNode = sceneLocationView.node(for: anchor), pathNode == nil && (sceneLocationView.locationNodes.filter { !($0.position != SCNVector3Zero) }.count == 0) else { return }
+        
         pathNode = PathNode(fromPointsSet: sceneLocationView.locationNodes.map { $0.position })
         sceneLocationView.scene.rootNode.addChildNode(pathNode!)
         pathNode?.position.y = anchorNode.position.y
+        
+//        let floorNode = SCNNode()
+//        floorNode.position = SCNVector3(0, anchorNode.position.y, 0)
+//        let floor = SCNFloor()
+//        floor.firstMaterial?.diffuse.contents = UIColor.clear
+//        floorNode.geometry = floor
+//        floorNode.castsShadow = true
+//        sceneLocationView.scene.rootNode.addChildNode(floorNode)
+        
         DispatchQueue.main.async { [weak self] in
             self?.infoLabel.text = "Added path"
         }
