@@ -68,12 +68,14 @@ enum MockLocationSet {
     case viaTLVOfficeToAzrieli
     case insideViaTLVOffice
     case viaTLVOfficeAroundTheCornerToIgalAlon
+    case viaNYCOfficeAroundTheBlock
     
     var startLocation: CLLocation {
         switch self {
         case .viaTLVOfficeToAzrieli: return CLLocation(latitude: 32.0723327, longitude: 34.7953844)
         case .viaTLVOfficeAroundTheCornerToIgalAlon: return CLLocation(latitude: 32.073159, longitude: 34.796919)
         case .insideViaTLVOffice: return CLLocation(latitude: 32.073183, longitude: 34.797094)
+        case .viaNYCOfficeAroundTheBlock: return CLLocation(latitude: 40.719957, longitude: -74.000324)
         }
     }
     
@@ -82,6 +84,7 @@ enum MockLocationSet {
         case .viaTLVOfficeToAzrieli: return CLHeadingMock(trueHeading: 200)
         case .viaTLVOfficeAroundTheCornerToIgalAlon: return CLHeadingMock(trueHeading: 0)
         case .insideViaTLVOffice: return CLHeadingMock(trueHeading: 0)
+        case .viaNYCOfficeAroundTheBlock: return CLHeadingMock(trueHeading: 0)
         }
     }
     
@@ -107,10 +110,19 @@ enum MockLocationSet {
         case .insideViaTLVOffice: return [
                 CLLocation(latitude: 32.073208, longitude: 34.797100),
                 CLLocation(latitude: 32.073231, longitude: 34.797110),
-                CLLocation(latitude: 32.073271, longitude: 34.797138
-            )
+                CLLocation(latitude: 32.073271, longitude: 34.797138)
+            ]
+            
+        case .viaNYCOfficeAroundTheBlock: return [
+                CLLocation(latitude: 40.719942, longitude: -74.000291),
+                CLLocation(latitude: 40.719773, longitude: -74.000439),
+                CLLocation(latitude: 40.719670, longitude: -74.000527),
+                CLLocation(latitude: 40.719538, longitude: -74.000635),
+                CLLocation(latitude: 40.719583, longitude: -74.000737),
+                CLLocation(latitude: 40.719618, longitude: -74.000797)
             ]
         }
+        
     }
 }
 
@@ -164,7 +176,7 @@ class LocationManager: NSObject {
         return locationManager.pathLocationPoints
     }
     
-    private var locationManager: LocationManagerProvider = CLLocationManagerMock(mockLocationSet: .insideViaTLVOffice)
+    private var locationManager: LocationManagerProvider = CLLocationManagerMock(mockLocationSet: .viaNYCOfficeAroundTheBlock)
     
     override init() {
         super.init()

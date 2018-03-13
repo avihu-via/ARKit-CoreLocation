@@ -291,7 +291,8 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
         if node.confirmedLocation && (distance > 100 || node.continuallyAdjustNodePositionWhenWithinRange || initialSetup) {
             if distance > 100 {
                 //If the item is too far away, bring it closer and scale it down
-                let scale = 100 / Float(distance)
+                let scaleFactor = Float(UserDefaults.standard.integer(forKey: kARScale))
+                let scale = scaleFactor / Float(distance)
                 
                 adjustedDistance = distance * Double(scale)
                 
