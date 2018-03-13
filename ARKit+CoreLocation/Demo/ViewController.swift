@@ -14,12 +14,12 @@ import CocoaLumberjack
 import ARKit
 
 struct LocationPathPoint {
-    let pathPoint: PathPoint
+//    let pathPoint: PathPoint
     let locationNode: LocationNode
 }
 
 @available(iOS 11.0, *)
-class ViewController: UIViewController {
+class ARViewController: UIViewController {
     private let infoLabelRefreshInterval = 0.1
     
     @IBOutlet private weak var sceneLocationView: SceneLocationView!
@@ -33,7 +33,7 @@ class ViewController: UIViewController {
     
     private var locationPathPoints: [LocationPathPoint] = []
     
-    private var pathNode: PathNode?
+    private var pathNode: SCNNode?
     private var planeAnchors: [ARPlaneAnchor] = []
     
     var updateInfoLabelTimer: Timer?
@@ -113,9 +113,9 @@ class ViewController: UIViewController {
 
 // MARK: - Actions
 
-private extension ViewController {
+private extension ARViewController {
     @IBAction func resetPathTapped() {
-        removeAllMarkedLocations()
+//        removeAllMarkedLocations()
     }
     
     @IBAction private func toggleARDebugInfo() {
@@ -123,14 +123,14 @@ private extension ViewController {
     }
     
     @IBAction func addCurrentLocationTapped() {
-        markCurrentLocation()
+//        markCurrentLocation()
     }
 }
 
 // MARK: - Private Methods
 // Here be Dragons
 
-private extension ViewController {
+private extension ARViewController {
     private func presentMockPathPoints() {
         sceneLocationView.locationManager.pathLocationPoints.forEach { point in
             let pointLocation = CLLocation(latitude: point.coordinate.latitude, longitude: point.coordinate.longitude, altitude: point.altitude)
@@ -139,64 +139,64 @@ private extension ViewController {
         }
     }
     
-    private func fetchStoredPathPoints() {
-        guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
-        let pathPointsFetchRequest = NSFetchRequest<PathPoint>(entityName: "PathPoint")
-        do {
-            let pathPoints = try context.fetch(pathPointsFetchRequest)
-            locationPathPoints = makeLocationPathPoints(from: pathPoints)
-            print("Fetched \(pathPoints.count) path points.")
-            if let firstPoint = pathPoints.first { print(firstPoint) }
-        } catch let error as NSError {
-            print("Could not fetch path points. \(error), \(error.userInfo)")
-        }
-    }
+//    private func fetchStoredPathPoints() {
+//        guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
+//        let pathPointsFetchRequest = NSFetchRequest<PathPoint>(entityName: "PathPoint")
+//        do {
+//            let pathPoints = try context.fetch(pathPointsFetchRequest)
+//            locationPathPoints = makeLocationPathPoints(from: pathPoints)
+//            print("Fetched \(pathPoints.count) path points.")
+//            if let firstPoint = pathPoints.first { print(firstPoint) }
+//        } catch let error as NSError {
+//            print("Could not fetch path points. \(error), \(error.userInfo)")
+//        }
+//    }
     
-    private func makeLocationPathPoints(from pathPoints: [PathPoint]) -> [LocationPathPoint] {
-        var points: [LocationPathPoint] = []
-        pathPoints.forEach { point in
-            let pointLocation = CLLocation(latitude: point.latitude, longitude: point.longitude, altitude: point.altitude)
-            let pointNode = ImageAnnotatedLocationNode(location: pointLocation, image: UIImage(named: "pin")!)
-            sceneLocationView.add(confirmedLocationNode: pointNode)
-            points.append(LocationPathPoint(pathPoint: point, locationNode: pointNode))
-        }
-        return points
-    }
+//    private func makeLocationPathPoints(from pathPoints: [PathPoint]) -> [LocationPathPoint] {
+//        var points: [LocationPathPoint] = []
+//        pathPoints.forEach { point in
+//            let pointLocation = CLLocation(latitude: point.latitude, longitude: point.longitude, altitude: point.altitude)
+//            let pointNode = ImageAnnotatedLocationNode(location: pointLocation, image: UIImage(named: "pin")!)
+//            sceneLocationView.add(confirmedLocationNode: pointNode)
+//            points.append(LocationPathPoint(pathPoint: point, locationNode: pointNode))
+//        }
+//        return points
+//    }
     
-    private func removeAllMarkedLocations() {
-        guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
-        do {
-            let locationNodes = locationPathPoints.map { $0.locationNode }
-            locationPathPoints.forEach { context.delete($0.pathPoint) }
-            try context.save()
-            locationNodes.forEach { sceneLocationView.remove(node: $0) }
-            locationPathPoints = []
-            print("All points removed")
-        } catch let error as NSError {
-            print("Could not delete all points. \(error), \(error.userInfo)")
-        }
-    }
+//    private func removeAllMarkedLocations() {
+//        guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
+//        do {
+//            let locationNodes = locationPathPoints.map { $0.locationNode }
+//            locationPathPoints.forEach { context.delete($0.pathPoint) }
+//            try context.save()
+//            locationNodes.forEach { sceneLocationView.remove(node: $0) }
+//            locationPathPoints = []
+//            print("All points removed")
+//        } catch let error as NSError {
+//            print("Could not delete all points. \(error), \(error.userInfo)")
+//        }
+//    }
     
-    private func markCurrentLocation() {
-        guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
-        
-        let image = UIImage(named: "pin")!
-        let annotationNode = ImageAnnotatedLocationNode(location: nil, image: image)
-        annotationNode.scaleRelativeToDistance = true
-        sceneLocationView.tagCurrentLocation(with: annotationNode)
-        
-        let newPoint = PathPoint(context: context)
-        newPoint.latitude = annotationNode.location.coordinate.latitude
-        newPoint.longitude = annotationNode.location.coordinate.longitude
-        newPoint.altitude = annotationNode.location.altitude
-        
-        do {
-            try context.save()
-            locationPathPoints.append(LocationPathPoint(pathPoint: newPoint, locationNode: annotationNode))
-        } catch let error as NSError {
-            print("Had problem saving new point: \(error), \(error.userInfo)")
-        }
-    }
+//    private func markCurrentLocation() {
+//        guard let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
+//        
+//        let image = UIImage(named: "pin")!
+//        let annotationNode = ImageAnnotatedLocationNode(location: nil, image: image)
+//        annotationNode.scaleRelativeToDistance = true
+//        sceneLocationView.tagCurrentLocation(with: annotationNode)
+//        
+//        let newPoint = PathPoint(context: context)
+//        newPoint.latitude = annotationNode.location.coordinate.latitude
+//        newPoint.longitude = annotationNode.location.coordinate.longitude
+//        newPoint.altitude = annotationNode.location.altitude
+//        
+//        do {
+//            try context.save()
+//            locationPathPoints.append(LocationPathPoint(pathPoint: newPoint, locationNode: annotationNode))
+//        } catch let error as NSError {
+//            print("Had problem saving new point: \(error), \(error.userInfo)")
+//        }
+//    }
     
     private func configureSceneLocationView() {
         //Set to true to display an arrow which points north.
@@ -260,7 +260,7 @@ private extension ViewController {
     
 // MARK: - SceneLocationViewDelegate
 
-extension ViewController: SceneLocationViewDelegate {
+extension ARViewController: SceneLocationViewDelegate {
     func sceneLocationViewDidAddSceneLocationEstimate(sceneLocationView: SceneLocationView, position: SCNVector3, location: CLLocation) {
         DDLogDebug("add scene location estimate, position: \(position), location: \(location.coordinate), accuracy: \(location.horizontalAccuracy), date: \(location.timestamp)")
     }
@@ -283,9 +283,17 @@ extension ViewController: SceneLocationViewDelegate {
     func sceneLocationView(_ sceneLocationView: SceneLocationView, updateAtTime time: TimeInterval) {
         guard let anchor = planeAnchors.first, let anchorNode = sceneLocationView.node(for: anchor), pathNode == nil && (sceneLocationView.locationNodes.filter { !($0.position != SCNVector3Zero) }.count == 0) else { return }
         
-        pathNode = PathNode(fromPointsSet: sceneLocationView.locationNodes.map { $0.position })
-        sceneLocationView.scene.rootNode.addChildNode(pathNode!)
+        if UserDefaults.standard.bool(forKey: kShowWalkingPathNode){
+            pathNode = PathNode(fromPointsSet: sceneLocationView.locationNodes.map { $0.position })
+        } else {
+            if let pickUpPosition = sceneLocationView.locationNodes.last?.position {
+                pathNode = TerminatorVertexNode(position: pickUpPosition)
+//                pickUpNode.position.y = anchorNode.position.y
+//                sceneLocationView.scene.rootNode.addChildNode(pickUpNode)
+            }
+        }
         pathNode?.position.y = anchorNode.position.y
+        sceneLocationView.scene.rootNode.addChildNode(pathNode!)
         
 //        let floorNode = SCNNode()
 //        floorNode.position = SCNVector3(0, anchorNode.position.y, 0)
