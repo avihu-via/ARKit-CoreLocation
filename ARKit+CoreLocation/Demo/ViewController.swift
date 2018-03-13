@@ -34,6 +34,7 @@ class ViewController: UIViewController {
     private var locationPathPoints: [LocationPathPoint] = []
     
     private var pathNode: PathNode?
+    private var planeAnchors: [ARPlaneAnchor] = []
     
     var updateInfoLabelTimer: Timer?
     
@@ -268,14 +269,25 @@ extension ViewController: SceneLocationViewDelegate {
         DDLogDebug("remove scene location estimate, position: \(position), location: \(location.coordinate), accuracy: \(location.horizontalAccuracy), date: \(location.timestamp)")
     }
     
-    func sceneLocationViewDidConfirmLocationOfNode(_ sceneLocationView: SceneLocationView, node: LocationNode) {}
+    func sceneLocationView(_ sceneLocationView: SceneLocationView, didConfirmLocationOfNode: LocationNode) {}
     
-    func sceneLocationViewDidSetupSceneNode(_ sceneLocationView: SceneLocationView, sceneNode: SCNNode) {}
+    func sceneLocationView(_ sceneLocationView: SceneLocationView, didSetupNode: SCNNode) {}
     
-    func sceneLocationViewDidUpdateLocationAndNodeScale(_ sceneLocationView: SceneLocationView, node: LocationNode) {
-        guard pathNode == nil && (sceneLocationView.locationNodes.filter { !($0.position != SCNVector3Zero) }.count == 0) else { return }
+    func sceneLocationView(_ sceneLocationView: SceneLocationView, didUpdateLocationAndScaleNode node: LocationNode) {
+    }
+    
+    func sceneLocationView(_ sceneLocationView: SceneLocationView, didDetectPlaneAnchor planeAnchor: ARPlaneAnchor) {
+        planeAnchors.append(planeAnchor)
+    }
+    
+    func sceneLocationView(_ sceneLocationView: SceneLocationView, updateAtTime time: TimeInterval) {
+        guard let anchor = planeAnchors.first, let anchorNode = sceneLocationView.node(for: anchor), pathNode == nil && (sceneLocationView.locationNodes.filter { !($0.position != SCNVector3Zero) }.count == 0) else { return }
         pathNode = PathNode(fromPointsSet: sceneLocationView.locationNodes.map { $0.position })
         sceneLocationView.scene.rootNode.addChildNode(pathNode!)
+        pathNode?.position.y = anchorNode.position.y
+        DispatchQueue.main.async { [weak self] in
+            self?.infoLabel.text = "Added path"
+        }
     }
 }
 

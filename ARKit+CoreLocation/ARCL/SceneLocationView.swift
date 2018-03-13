@@ -19,11 +19,15 @@ public protocol SceneLocationViewDelegate: class {
     // After a node's location is initially set based on current location,
     // it is later confirmed once the user moves far enough away from it.
     // This update uses location data collected since the node was placed to give a more accurate location.
-    func sceneLocationViewDidConfirmLocationOfNode(_ sceneLocationView: SceneLocationView, node: LocationNode)
+    func sceneLocationView(_ sceneLocationView: SceneLocationView, didConfirmLocationOfNode: LocationNode)
     
-    func sceneLocationViewDidSetupSceneNode(_ sceneLocationView: SceneLocationView, sceneNode: SCNNode)
+    func sceneLocationView(_ sceneLocationView: SceneLocationView, didSetupNode: SCNNode)
     
-    func sceneLocationViewDidUpdateLocationAndNodeScale(_ sceneLocationView: SceneLocationView, node: LocationNode)
+    func sceneLocationView(_ sceneLocationView: SceneLocationView, didUpdateLocationAndScaleNode: LocationNode)
+    
+    func sceneLocationView(_ sceneLocationView: SceneLocationView, didDetectPlaneAnchor planeAnchor: ARPlaneAnchor)
+    
+    func sceneLocationView(_ sceneLocationView: SceneLocationView, updateAtTime time: TimeInterval)
 }
 
 public enum LocationEstimationMethod {
@@ -55,7 +59,7 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
         didSet {
             guard let sceneNode = sceneNode else { return }
             locationNodes.forEach { sceneNode.addChildNode($0) }
-            locationDelegate?.sceneLocationViewDidSetupSceneNode(self, sceneNode: sceneNode)
+            locationDelegate?.sceneLocationView(self, didSetupNode: sceneNode)
         }
     }
     
@@ -257,7 +261,7 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
     private func confirmLocation(of node: LocationNode) {
         node.location = location(of: node)
         node.confirmedLocation = true
-        locationDelegate?.sceneLocationViewDidConfirmLocationOfNode(self, node: node)
+        locationDelegate?.sceneLocationView(self, didConfirmLocationOfNode: node)
     }
     
     func updatePositionAndScaleOfLocationNodes() {
@@ -348,10 +352,19 @@ public class SceneLocationView: ARSCNView, ARSCNViewDelegate {
         
         SCNTransaction.commit()
         
-        locationDelegate?.sceneLocationViewDidUpdateLocationAndNodeScale(self, node: node)
+        locationDelegate?.sceneLocationView(self, didUpdateLocationAndScaleNode: node)
     }
     
     //MARK: ARSCNViewDelegate
+    
+    public func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
+        locationDelegate?.sceneLocationView(self, didDetectPlaneAnchor: planeAnchor)
+    }
+    
+    public func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        locationDelegate?.sceneLocationView(self, updateAtTime: time)
+    }
     
     public func renderer(_ renderer: SCNSceneRenderer, didRenderScene scene: SCNScene, atTime time: TimeInterval) {
         if sceneNode == nil {
